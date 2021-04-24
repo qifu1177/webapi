@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace BLL.Models
+{
+    public class Cupboard
+    {
+        public int CupboardId { get; set; }        
+        public string Name { get; set; }
+        public int Wide { get; set; }
+        public int Height { get; set; }
+        public int RoomId { get; set; }
+        public List<Grid> Grids { get; } = new List<Grid>();
+    }
+}
