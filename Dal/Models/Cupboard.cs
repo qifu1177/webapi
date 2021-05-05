@@ -13,5 +13,6 @@ namespace Dal.Models
         public int Height { get; set; }
         public int RoomId { get; set; }
         public List<Grid> Grids { get; } = new List<Grid>();
+        public string ImagePath { get; set; }
     }
 }

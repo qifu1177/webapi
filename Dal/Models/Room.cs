@@ -10,5 +10,6 @@ namespace Dal.Models
         public string Name { get; set; }
         public List<Cupboard> Cupboards { get; } = new List<Cupboard>();
         public DateTime TS { get; set; }
+        public string ImagePath { get; set; }
     }
 }

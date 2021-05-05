@@ -32,9 +32,12 @@
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
     <Content Include="src\App.vue" />
+    <Content Include="src\logics\CupboardLogic.js" />
     <Content Include="src\logics\index.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\logics\Logic.js" />
+    <Content Include="src\logics\RoomLogic.js" />
     <Content Include="src\services\index.js">
       <SubType>Code</SubType>
     </Content>
@@ -46,6 +49,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\router\index.js" />
+    <Content Include="src\views\RoomEdit.vue" />
     <Content Include="src\views\Thing.vue" />
   </ItemGroup>
   <ItemGroup>

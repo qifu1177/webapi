@@ -11,5 +11,6 @@ namespace Dal.Models
         public Grid Grid { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
+        public string ImagePath { get; set; }
     }
 }

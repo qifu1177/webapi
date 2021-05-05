@@ -13,6 +13,7 @@ namespace Dal.Models
         public int PositionY { get; set; }
 
         public List<Thing> Things { get; } = new List<Thing>();
+        public string ImagePath { get; set; }
 
     }
 }

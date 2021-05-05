@@ -2,12 +2,10 @@
     <div id="app">
         <div>
             <b-navbar toggleable="lg" type="dark" variant="info">
-                <b-navbar-brand to="/">Home</b-navbar-brand>
-
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav>
+                        <b-nav-item to="/">Home</b-nav-item>
                         <b-nav-item to="/room">Room</b-nav-item>
                         <b-nav-item to="/cupboard">Cupboard</b-nav-item>
                         <b-nav-item to="/thing">Thing</b-nav-item>
