@@ -109,27 +109,43 @@ namespace WebApi.Controllers
                 string currentDir = Directory.GetCurrentDirectory();
                 var fileDir = Path.Combine(currentDir, "files");
                 string filePath = Path.Combine(fileDir, fileName);
-                if(IsImage(filePath))
+                FileInfo fileInfo = new FileInfo(filePath);
+                if(fileInfo.Exists)
                 {
-                    var image = System.IO.File.OpenRead(filePath);
-                    return File(image, "image/jpeg");
+                    string extension = fileInfo.Extension.ToLower();
+                    string contentType = "application/octet-stream";
+                    if (IsImage(extension))
+                    {                        
+                        contentType= "image/jpeg";
+                    }
+                    else if(extension.EndsWith("pdf"))
+                    {
+                        contentType = "application/pdf";
+                    }
+                    else if (extension.EndsWith("json") || extension.EndsWith("txt") )
+                    {
+                        contentType = "text/html; charset=UTF-8";
+                    }
+                    else
+                    {
+                        contentType = "application/octet-stream";                        
+                    }
+                    FileStream stream = System.IO.File.OpenRead(filePath);
+                    return File(stream, contentType);
                 }
                 else
                 {
-                    FileStream stream = System.IO.File.OpenRead(filePath);
-                    return File(stream, "application/octet-stream");
-                }
-                
+                    return StatusCode(500, $"File {fileName} is not found.");
+                }                
             }
             catch(Exception ex)
             {
-                return StatusCode(500, $"File is not found. Error: {ex}");
+                return StatusCode(500, $"File {fileName} is not found. Error: {ex}");
             }            
         }
 
-        private bool IsImage(string filePath)
-        {
-            string extension = Path.GetExtension(filePath).ToLower();
+        private bool IsImage(string extension)
+        {            
             if (extension.EndsWith("jpg") || extension.EndsWith("jpeg") || extension.EndsWith("png") || extension.EndsWith("gif") || extension.EndsWith("bmp"))
                 return true;
             return false;

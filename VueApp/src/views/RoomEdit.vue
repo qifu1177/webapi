@@ -7,12 +7,7 @@
                               placeholder="Enter name"
                               required></b-form-input>
             </b-form-group>
-            <b-form-group label="Image:" label-for="Image">
-                <b-form-file v-model="selectedFiles"
-                             :state="uploadFile()"
-                             placeholder="Choose a file or drop it here..." accept=".pdf"
-                             drop-placeholder="Drop file here..."></b-form-file>
-            </b-form-group>
+           
             <b-button-group size="sm" class="mx-3">
                 <b-button type="submit" variant="primary">Submit</b-button>
                 <b-button type="reset" variant="danger">Reset</b-button>
@@ -20,19 +15,24 @@
             </b-button-group>
 
         </b-form>
+        <FileManage  v-bind:more-selected="false" v-bind:selected-files="selectedFiles"></FileManage>
     </div>
 </template>
 <script>
-    import roomLogic from '@/logics'
-    roomLogic.init('https://localhost:44356/data');
+    import roomLogic from '@/logics';
+    import fileManager from '@/components/FileManage.vue';
+    
     export default {
         name: 'Room',
+        components: {
+            FileManage: fileManager
+        },
         data: function () {
             return {
                 form: {
-                },
-                selectedFiles: [],
+                },                
                 show: true,
+                selectedFiles:[],
                 session: { id: '' },
                 uploadbackdata: { message: '', exception: '' },
                 outputData: { message: '', exception: '' }
@@ -46,10 +46,7 @@
         },
         methods: {
             onSubmit(event) {
-                event.preventDefault();
-
-                if (this.selectedFiles.length > 0)
-                    this.form.ImagePath = this.selectedFiles[0].name;
+                event.preventDefault();                                
                 this.form.TS = new Date().getTime();
                 roomLogic.saveRoom(this.session.id, this.form, this.outputData);
             },
@@ -68,15 +65,11 @@
             },
             loadSessionId() {
                 roomLogic.loadSessionId(this.session);
-            },
-            uploadFile() {
-                //debugger;
-                if (this.selectedFiles.length > 0) {
-                    roomLogic.uploadFile(this.session.id, this.selectedFiles[0], this.uploadbackdata);
-                }
             }
+            
         },
         beforeMount() {
+            roomLogic.init(this.$baseServerUrl);
             this.loadSessionId();
             this.form = this.clone(this.$router.currentRoute.query);
         },

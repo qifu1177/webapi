@@ -3,7 +3,7 @@ import axios from 'axios';
 function HttpData() {
     let that = this;
     this.baseUrl = '',
-        this.init = (baseUrl) => that.baseUrl = baseUrl;
+    this.init = (baseUrl) => that.baseUrl = baseUrl;
     this.get = (url) => {
         return {
             then: (callBack, errorBack) => {
@@ -51,7 +51,7 @@ function HttpData() {
             }
         }
     };
-    this.createFormData = (sessionid,inputData) => {
+    this.createFormData = (sessionid, inputData) => {
         let formData = new FormData();
         formData.append("SessionId", sessionid);
         for (let k in inputData) {
@@ -59,11 +59,11 @@ function HttpData() {
         }
         return formData;
     };
-    this.post = (className,sessionid, inputData) => {
+    this.post = (className, sessionid, inputData) => {
         return {
             then: (callBack, errorBack) => {
-                let url = that.baseUrl + '/' + className ;
-                let formdata = this.createFormData(sessionid,inputData);                
+                let url = that.baseUrl + '/' + className;
+                let formdata = this.createFormData(sessionid, inputData);
                 axios.post(url, formdata, {
                     headers: {
                         'Content-Type': 'form-data'

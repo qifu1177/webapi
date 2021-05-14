@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <div class="row">
+        <div>
             <b-button-toolbar aria-label="Toolbar">
                 <b-button-group size="sm" class="mx-1">
                     <b-button @click="Create()">New</b-button>
@@ -12,26 +12,29 @@
                 </b-button-group>
             </b-button-toolbar>
         </div>
-        <b-table hover :items="rooms" :fields="fields" show-empty>
-            <template #cell(actions)="row">
+        <b-table hover :items="rooms" :fields="fields" responsive="sm" show-empty>
+            <template v-slot:cell(Name)="data">                
+                <div variant="light">{{data.item.Name}}</div>
+            </template>
+            <template #cell(actions)="data">
                 <b-button-group>
-                    <b-button size="sm" @click="Edit(row.item, $event.target)" class="mr-1">
+                    <b-button size="sm" @click="Edit(data.item, $event.target)" class="mr-1">
                         Edit
                     </b-button>
-                    <b-button size="sm" @click="Delete(row.item, $event.target)">
+                    <b-button size="sm" @click="Delete(data.item, $event.target)">
                         Delete
                     </b-button>
                 </b-button-group>
             </template>
         </b-table>
-        <b-modal>
+        <!--<b-modal>
             <template #default="{ hide }">
                 <p>Are you shue {{deleteRoom.Name}}</p>
             </template>
             <template #modal-footer="{ ok, cancel, hide }">
-                <b>Custom Footer</b>
+                <b>Custom Footer</b>-->
                 <!-- Emulate built in modal footer ok and cancel button actions -->
-                <b-button size="sm" variant="success" @click="DeleteOk(deleteRoom.RoomId)">
+                <!--<b-button size="sm" variant="success" @click="DeleteOk(deleteRoom.RoomId)">
                     OK
                 </b-button>
                 <b-button size="sm" variant="danger" @click="cancel()">
@@ -39,14 +42,14 @@
                 </b-button>
 
             </template>
-        </b-modal>
+        </b-modal>-->
     </div>
 </template>
 
 <script>
     import roomLogic from '@/logics'
-    import { CupboardLogic } from '@/logics'
-    roomLogic.init('https://localhost:44356/data');
+    import { CupboardLogic } from '@/logics'    
+    
     export default {
         name: 'Room',
         data: function () {
@@ -107,6 +110,7 @@
             }
         },
         beforeMount() {
+            roomLogic.init(this.$baseServerUrl);
             this.loadRooms();
         },
     };
