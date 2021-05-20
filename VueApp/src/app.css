@@ -1,0 +1,12 @@
+
+.div-img {
+    width: auto;
+    height: 600px;
+    overflow-y: auto;
+}
+
+.img-small {
+    width: 90px;
+    height: auto;
+    cursor: pointer;
+}

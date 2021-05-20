@@ -1,55 +1,37 @@
 <template>
     <div class="container-fluid">
+        <br />
         <div>
-            <b-button-toolbar aria-label="Toolbar">
-                <b-button-group size="sm" class="mx-1">
-                    <b-button @click="Create()">New</b-button>
-                </b-button-group>
-
-                <b-button-group size="sm" class="mx-3">
-                    <b-button>List</b-button>
-                    <b-button>Card</b-button>
-                </b-button-group>
-            </b-button-toolbar>
+            <b-button-group size="sm" class="mx-1">
+                <b-button @click="Create()"><b-icon icon="file-earmark-richtext"></b-icon></b-button>
+                <b-button @click="showList=true"><b-icon icon="list-check"></b-icon></b-button>
+                <b-button @click="showList=false"><b-icon icon="grid"></b-icon></b-button>
+            </b-button-group>
         </div>
+        <br />
         <b-table hover :items="rooms" :fields="fields" responsive="sm" show-empty>
-            <template v-slot:cell(Name)="data">                
+            <template v-slot:cell(Name)="data">
                 <div variant="light">{{data.item.Name}}</div>
             </template>
             <template #cell(actions)="data">
                 <b-button-group>
-                    <b-button size="sm" @click="Edit(data.item, $event.target)" class="mr-1">
-                        Edit
+                    <b-button variant="light" size="sm" @click="Edit(data.item, $event.target)" class="mr-1">
+                        <b-icon icon="pencil-square" variant="default"></b-icon>
                     </b-button>
-                    <b-button size="sm" @click="Delete(data.item, $event.target)">
-                        Delete
+                    <b-button variant="light" size="sm" @click="Delete(data.item, $event.target)">
+                        <b-icon icon="trash" variant="danger"></b-icon>
                     </b-button>
                 </b-button-group>
             </template>
         </b-table>
-        <!--<b-modal>
-            <template #default="{ hide }">
-                <p>Are you shue {{deleteRoom.Name}}</p>
-            </template>
-            <template #modal-footer="{ ok, cancel, hide }">
-                <b>Custom Footer</b>-->
-                <!-- Emulate built in modal footer ok and cancel button actions -->
-                <!--<b-button size="sm" variant="success" @click="DeleteOk(deleteRoom.RoomId)">
-                    OK
-                </b-button>
-                <b-button size="sm" variant="danger" @click="cancel()">
-                    Cancel
-                </b-button>
 
-            </template>
-        </b-modal>-->
     </div>
 </template>
 
 <script>
     import roomLogic from '@/logics'
-    import { CupboardLogic } from '@/logics'    
-    
+    import { CupboardLogic } from '@/logics'
+
     export default {
         name: 'Room',
         data: function () {
@@ -72,7 +54,7 @@
                     { key: 'actions', label: '' }
                 ],
                 deleteRoom: { Name: '', RoomId: 0 },
-
+                showList: true
             }
         },
         computed: {
@@ -80,7 +62,7 @@
                 return 'active';
             }
         },
-       
+
         methods: {
             loadRooms: function () {
                 roomLogic.loadRooms(this.rooms);
@@ -92,7 +74,7 @@
                     Name: '',
                     Cupboards: [],
                     TS: new Date(),
-                    ImagePath:''
+                    ImagePath: ''
                 };
                 this.$router.push({ path: 'room/edit', query: room });
             },
@@ -111,6 +93,7 @@
         },
         beforeMount() {
             roomLogic.init(this.$baseServerUrl);
+            roomLogic.setErrorFunc(this.$createShowMessage('error', this));
             this.loadRooms();
         },
     };

@@ -16,5 +16,9 @@
     <ProjectReference Include="..\Dal\Dal.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="icons\" />
+  </ItemGroup>
+
 
 </Project>

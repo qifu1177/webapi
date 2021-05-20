@@ -31,8 +31,11 @@
   <ItemGroup>
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
+    <Content Include="src\app.css" />
+    <Content Include="src\app.scss" />
     <Content Include="src\App.vue" />
     <Content Include="src\components\FileManage.vue" />
+    <Content Include="src\components\FileSelect.vue" />
     <Content Include="src\logics\CupboardLogic.js" />
     <Content Include="src\logics\index.js">
       <SubType>Code</SubType>

@@ -28,16 +28,34 @@ namespace WebApi.Controllers
                 foreach(FileInfo fInfo in directoryInfo.EnumerateFiles())
                 {
                     string extension = fInfo.Extension.ToLower();
-                    list.Add(new BLL.Models.FileResult
+                    string url=$"{Request.Scheme}://{Request.Host}";
+                    BLL.Models.FileResult fileResult= new BLL.Models.FileResult
                     {
                         Name = fInfo.Name,
                         FileType = extension,
-                        Size=fInfo.Length,
-                        IsImage=extension.EndsWith("jpg") || extension.EndsWith("jpeg") || extension.EndsWith("png") || extension.EndsWith("gif") || extension.EndsWith("bmp")
-                    }) ;
+                        Size = fInfo.Length,
+                        Link = $"{url}/file/{fInfo.Name}",                        
+                        IsImage = extension.EndsWith("jpg") || extension.EndsWith("jpeg") || extension.EndsWith("png") || extension.EndsWith("gif") || extension.EndsWith("bmp")
+                    };
+                    SetIcon(fileResult,url);
+                    list.Add(fileResult);
                 }
             }
             return list;
+        }
+        private void SetIcon(BLL.Models.FileResult fileResult,string url)
+        {
+            if (fileResult.IsImage)
+                fileResult.Icon = fileResult.Link;
+            else
+            {
+                if (fileResult.FileType.ToLower().EndsWith("pdf"))
+                    fileResult.Icon = $"{url}/file/icon/pdf.png";
+                else if (fileResult.FileType.ToLower().EndsWith("doc") || fileResult.FileType.ToLower().EndsWith("docx"))
+                    fileResult.Icon = $"{url}/file/icon/wort.png";
+                else 
+                    fileResult.Icon = $"{url}/file/icon/dokument.png";
+            }
         }
         [HttpDelete("{fileName}")]
         public IActionResult DeleteFile(string fileName)

@@ -143,7 +143,32 @@ namespace WebApi.Controllers
                 return StatusCode(500, $"File {fileName} is not found. Error: {ex}");
             }            
         }
-
+        [HttpGet("icon/{fileName}")]
+        public IActionResult GetIcon(string fileName)
+        {
+            try
+            {
+                string currentDir = Directory.GetCurrentDirectory();
+                var fileDir = Path.Combine(currentDir, "icons");
+                string filePath = Path.Combine(fileDir, fileName);
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists)
+                {
+                    string extension = fileInfo.Extension.ToLower();
+                    string contentType = "image/jpeg";                                     
+                    FileStream stream = System.IO.File.OpenRead(filePath);
+                    return File(stream, contentType);
+                }
+                else
+                {
+                    return StatusCode(500, $"File {fileName} is not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"File {fileName} is not found. Error: {ex}");
+            }
+        }
         private bool IsImage(string extension)
         {            
             if (extension.EndsWith("jpg") || extension.EndsWith("jpeg") || extension.EndsWith("png") || extension.EndsWith("gif") || extension.EndsWith("bmp"))

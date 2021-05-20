@@ -10,5 +10,7 @@ namespace BLL.Models
         public bool IsImage { get; set; }
         public string FileType { get; set; }
         public long Size { get; set; }
+        public string Link { get; set; }
+        public string Icon { get; set; }
     }
 }

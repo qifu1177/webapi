@@ -1,0 +1,20 @@
+
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+$img-small-width:120px;
+$img-small-height: auto;
+$div-img-width:auto;
+$div-img-height:600px;
+
+.img-smal {
+    width: $img-small-width;
+    height: $img-small-height;
+    cursor: pointer;
+}
+.div-img{
+    width:$div-img-width;
+    height:$div-img-height;
+    overflow-y:auto;
+}
+
