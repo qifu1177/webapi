@@ -21,21 +21,21 @@ namespace WebApi.Controllers
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
-            int[] a = new int[10];
-            Array.Resize(ref a, a.Length + 2);
+            
             _logger = logger;
-            string str=RoomLogic.Instance.ToString();
-            str = str.Reverse();
-            try
-            {
-                Test.Instance.DoSomething(5, "");                
-                
-            }catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
+            //string str = RoomLogic.Instance.ToString();
+            //str = str.Reverse();
+            //try
+            //{
+            //    Test.Instance.DoSomething(5, "");
 
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+        }
+        
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

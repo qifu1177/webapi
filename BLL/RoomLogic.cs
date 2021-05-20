@@ -42,7 +42,7 @@ namespace BLL
                         ,
                             TS = room.TS.ToJsTime()
                         }).ToList();
-            }
+            }           
             str = JsonConvert.SerializeObject(list, Formatting.None);
             return str;
         }
@@ -67,10 +67,10 @@ namespace BLL
                 if(string.IsNullOrEmpty(sessionId))
                     throw new ArgumentException("SesseionId is not found.", "sessionid");
                 room.ImagePath= dic["ImagePath"][0];
-                if(!string.IsNullOrEmpty(room.ImagePath))
-                {
-                    room.ImagePath = CopyFile(sessionId, room.ImagePath);
-                }
+                //if(!string.IsNullOrEmpty(room.ImagePath))
+                //{
+                //    room.ImagePath = CopyFile(sessionId, room.ImagePath);
+                //}
             }
             if (dic.ContainsKey("RoomId") && dic["RoomId"].Count > 0)
             {

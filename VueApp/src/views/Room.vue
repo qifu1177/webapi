@@ -9,28 +9,81 @@
             </b-button-group>
         </div>
         <br />
-        <b-table hover :items="rooms" :fields="fields" responsive="sm" show-empty>
-            <template v-slot:cell(Name)="data">
-                <div variant="light">{{data.item.Name}}</div>
-            </template>
-            <template #cell(actions)="data">
-                <b-button-group>
-                    <b-button variant="light" size="sm" @click="Edit(data.item, $event.target)" class="mr-1">
-                        <b-icon icon="pencil-square" variant="default"></b-icon>
-                    </b-button>
-                    <b-button variant="light" size="sm" @click="Delete(data.item, $event.target)">
-                        <b-icon icon="trash" variant="danger"></b-icon>
-                    </b-button>
-                </b-button-group>
-            </template>
-        </b-table>
+        <div v-if="showList">
+            <b-table hover :items="rooms" :fields="fields" responsive="sm" show-empty>
+                <template v-slot:cell(Name)="data">
+                    <div variant="light">{{data.item.Name}}</div>
+                </template>
+                <template v-slot:cell(ImagePath)="data">
+                    <div variant="light" @click="openFile(data.item.ImagePath)" style="cursor:pointer;">{{data.item.ImagePath}}</div>
+                </template>
+                <template #cell(actions)="data">
+                    <b-button-group>
+                        <b-button variant="light" size="sm" @click="Edit(data.item)" class="mr-1">
+                            <b-icon icon="pencil-square" variant="default"></b-icon>
+                        </b-button>
+                        <b-button variant="light" size="sm" @click="data.toggleDetails">
+                            <b-icon icon="trash" variant="danger"></b-icon>
+                        </b-button>
+                    </b-button-group>
+                </template>
+                <template #row-details="data">
+                    <b-card>
+                        <div>
+                            Are you sure you want to delete the data {{data.item.Name}}?
+                        </div>
+                        <b-button-group size="sm" class="mx-3">
+                            <b-button size="sm" @click="deleteRoom(data.item)" variant="danger">OK</b-button>
+                            <b-button size="sm" @click="data.toggleDetails" variant="light">Cancel</b-button>
+                        </b-button-group>
+                    </b-card>
+                </template>
+            </b-table>
+        </div>
+        <div v-else>
+            <b-card-group columns>
+                <b-card v-for="(item,index) in rooms" :key="index">
+                    <b-row>
+                        <b-col align="center">
+                            <div variant="light" @click="openFile(item.ImagePath)" style="cursor:pointer;">{{item.ImagePath}}</div>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col align="center"><b>{{item.Name}}</b></b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col align="center">
+                            <b-button-group>
+                                <b-button variant="light" size="sm" @click="Edit(item)" class="mr-1">
+                                    <b-icon icon="pencil-square" variant="default"></b-icon>
+                                </b-button>
+                                <b-button variant="light" size="sm" @click="item.showDelete=true">
+                                    <b-icon icon="trash" variant="danger"></b-icon>
+                                </b-button>
+                            </b-button-group>
+                        </b-col>
+                    </b-row>
+                    <b-row v-show="item.showDelete">
+                        <b-col>
+                            <div>
+                                Are you sure you want to delete the data {{item.Name}} ?
+                            </div>
+                            <b-button-group size="sm" class="mx-3">
+                                <b-button size="sm" @click="deleteRoom(item)" variant="danger">OK</b-button>
+                                <b-button size="sm" @click="item.showDelete=false" variant="light">Cancel</b-button>
+                            </b-button-group>
+                        </b-col>
+                    </b-row>
+                </b-card>
+            </b-card-group>
+        </div>
+
 
     </div>
 </template>
 
 <script>
     import roomLogic from '@/logics'
-    import { CupboardLogic } from '@/logics'
 
     export default {
         name: 'Room',
@@ -53,20 +106,26 @@
                     },
                     { key: 'actions', label: '' }
                 ],
-                deleteRoom: { Name: '', RoomId: 0 },
+                outputData: { message: '', exception: '' },
                 showList: true
             }
         },
-        computed: {
-            get_class: function () {
-                return 'active';
+        computed: {            
+        },
+        watch: {
+            outputData: {
+                handler(newData) {
+                    if (newData.message && newData.message == 'OK') {
+                        this.outputData.message = '';
+                        this.loadRooms();
+                    }
+                },
+                deep: true
             }
         },
-
         methods: {
             loadRooms: function () {
-                roomLogic.loadRooms(this.rooms);
-                window.console.log(CupboardLogic);
+                roomLogic.loadRooms(this.rooms);               
             },
             Create: function () {
                 let room = {
@@ -78,17 +137,15 @@
                 };
                 this.$router.push({ path: 'room/edit', query: room });
             },
-            Edit: function (item, button) {
-                window.console.log(button);
+            Edit: function (item) {
                 this.$router.push({ path: 'room/edit', query: item });
             },
-            Delete: function (item, button) {
-                window.console.log(button);
-                this.deleteRoom = item;
-
+            deleteRoom: function (item) {
+                this.outputData.message = '';
+                roomLogic.deleteRoom(item.RoomId, this.outputData);
             },
-            DeleteOk: function (roomId) {
-                roomLogic.deleteRoom(roomId);
+            openFile(filename) {
+                window.open(this.$baseServerUrl + '/file/' + filename, '_blank');
             }
         },
         beforeMount() {

@@ -7,13 +7,14 @@ function RoomLogic() {
                 let item = datas[i];
                 item.TS = new Date(item.TS);
                 item.actions = '';
+                item['showDelete'] = false;
                 list.push(item);
             }
         }, this.errorFunc);
     };    
-    this.deleteRoom = (roomId) => {
-        this.data.deleteWithId("Room", roomId).then(function (responseData) {
-            window.console.log(responseData);
+    this.deleteRoom = (roomId, output) => {
+        this.data.deleteWithId("Room", roomId).then(function (message) {
+            output.message = message;
         }, this.errorFunc);
     };
     this.saveRoom = (sessionid, inputRoom,output) => {

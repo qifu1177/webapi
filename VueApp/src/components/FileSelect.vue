@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-input-group>
-            <b-form-input v-model="selectedFiles.str" @click="openFileManager()" :readonly="true"></b-form-input>            
+            <b-form-input v-model="selectedFiles.name" @click="openFileManager()" :readonly="true"></b-form-input>            
         </b-input-group>
         <div v-if="showFileManager">
             <b-card>
@@ -25,7 +25,7 @@
         },
         props: {
             selectedFiles: {
-                str: ''
+                name: ''
             },
             moreSelected: Boolean
         },
@@ -42,13 +42,13 @@
         },
         methods: {
             btOkClick() {
-                this.selectedFiles.str = this.selectedFileList.join();
+                this.selectedFiles.name = this.selectedFileList.join();
                 this.showFileManager = false;
             },
             openFileManager() {
                 this.selectedFileList.splice(0, this.selectedFileList.length);
-                if (this.selectedFiles.str)
-                    this.selectedFileList = this.selectedFiles.str.split(',');
+                if (this.selectedFiles.name)
+                    this.selectedFileList = this.selectedFiles.name.split(',');
                 this.showFileManager = true;
             }
         }

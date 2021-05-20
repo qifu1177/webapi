@@ -8,7 +8,7 @@
                               required></b-form-input>
             </b-form-group>
             <b-form-group label="Image:" label-for="ImagePath">                
-                <FileSelect v-bind:selectedFiles="selectedFiles" v-bind:moreSelected="false" ></FileSelect>
+                <FileSelect v-bind:selectedFiles="selectedFile" v-bind:moreSelected="false" ></FileSelect>
             </b-form-group>
             <b-button-group size="sm" class="mx-3">
                 <b-button type="submit" variant="primary">Submit</b-button>
@@ -34,7 +34,7 @@
                 form: {
                 },                
                 show: true,          
-                selectedFiles: {str:''},
+                selectedFile: {name:''},
                 session: { id: '' },
                 uploadbackdata: { message: '', exception: '' },
                 outputData: { message: '', exception: '' }
@@ -43,20 +43,32 @@
         computed: {
             
         },
+        watch: {
+            outputData: {
+                handler(newData) {
+                    if (newData.message && newData.message == 'OK') {
+                        this.outputData.message = '';
+                        this.$router.go(-1);
+                    }
+                },
+                deep: true
+            }
+        },
         mounted: function () {
             this.form = this.clone(this.$router.currentRoute.query);
-            this.selectedFiles.str = this.form.ImagePath;
+            this.selectedFile.name = this.form.ImagePath;
         },
         methods: {
             onSubmit(event) {
                 event.preventDefault();                
                 this.form.TS = new Date().getTime();
+                this.form.ImagePath = this.selectedFile.name;
                 roomLogic.saveRoom(this.session.id, this.form, this.outputData);
             },
             onReset(event) {
                 event.preventDefault();
                 this.form = this.clone(this.$router.currentRoute.query);   
-                this.selectedFiles.str = this.form.ImagePath;
+                this.selectedFile.name = this.form.ImagePath;
             },
             back() {
                 this.$router.go(-1);

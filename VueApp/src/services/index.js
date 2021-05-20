@@ -111,7 +111,7 @@ function HttpData() {
     };
     this.deleteWithId = (className, id) => {
         let url = this.baseUrl + '/' + className + '/' + id;
-        return that.get(url);
+        return that.delete(url);
     }
 }
 export default new HttpData();
