@@ -27,17 +27,22 @@ function Logic() {
         }
             , (response) => {
                 backData.exception = response;
-                window.console.log(response);
-                backData.message = backData.exception.message;
+                backData.message = backData.exception.response.data || backData.exception.message;
                 backData.state = window.$UploadFileState.fail;
-                that.errorFunc(response);
+                that.errorFunc(backData);
             });
     };
+    this.loadFileSetting = (setting) => {
+        let url = this.baseUrl + '/file/setting';
+        http.get(url).then((obj) => {            
+            setting["fileTypes"] = obj.filetypes;
+            setting["maxSize"] = obj.maxsize;
+        }, this.errorFunc);
+    }
     this.loadFiles = (fileList, selectedFiles) => {
         let url = this.baseUrl + '/file/files';
         http.get(url).then((datas) => {
-            for (let i = 0; i < datas.length; i++) {
-                //datas[i]['link'] = that.baseUrl + '/file/' + datas[i].name;                
+            for (let i = 0; i < datas.length; i++) {                         
                 datas[i]['selected'] = selectedFiles.includes(datas[i].name);
                 datas[i]['showDelete'] = false;
                 fileList.push(datas[i]);

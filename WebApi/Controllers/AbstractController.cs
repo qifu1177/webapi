@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BLL.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -64,6 +65,7 @@ namespace WebApi.Controllers
         {
             return Ok(Guid.NewGuid());
         }
+               
 
         [HttpPost("file"), DisableRequestSizeLimit]
         public IActionResult Upload()
@@ -72,6 +74,12 @@ namespace WebApi.Controllers
             {
                 string sessionId = Request.Form["sessionid"];
                 var file = Request.Form.Files[0];
+                string message;
+                bool b = FileService.Instance.ValidFile(file.FileName, file.Length, _configuration, out message);
+                if(!b)
+                {                   
+                    return StatusCode(500, message);
+                }
                 string currentDir = Directory.GetCurrentDirectory();
                 var fileDir = Path.Combine(currentDir, "files");
                 if (file.Length > 0)
@@ -174,6 +182,17 @@ namespace WebApi.Controllers
             if (extension.EndsWith("jpg") || extension.EndsWith("jpeg") || extension.EndsWith("png") || extension.EndsWith("gif") || extension.EndsWith("bmp"))
                 return true;
             return false;
+        }
+
+        protected string GetFileDir()
+        {
+            string currentDir = Directory.GetCurrentDirectory();
+            return Path.Combine(currentDir, "files");
+        }
+
+        protected string GetBaseUrl()
+        {
+            return $"{Request.Scheme}://{Request.Host}";
         }
     }
 }

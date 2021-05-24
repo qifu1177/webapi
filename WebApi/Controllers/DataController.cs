@@ -26,7 +26,9 @@ namespace WebApi.Controllers
             string jsonStr = "";
             try
             {
-                jsonStr = CallMethode("BLL", classname, "All", new object[0]).ToString();
+                object filePath = GetFileDir();
+                object baseUrl = GetBaseUrl();
+                jsonStr = CallMethode("BLL", classname, "All", new object[] {filePath,baseUrl }).ToString();
             }
             catch (Exception ex)
             {

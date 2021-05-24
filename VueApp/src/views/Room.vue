@@ -14,8 +14,8 @@
                 <template v-slot:cell(Name)="data">
                     <div variant="light">{{data.item.Name}}</div>
                 </template>
-                <template v-slot:cell(ImagePath)="data">
-                    <div variant="light" @click="openFile(data.item.ImagePath)" style="cursor:pointer;">{{data.item.ImagePath}}</div>
+                <template v-slot:cell(ImagePath)="data">                    
+                    <FileView :is-list="true" :is-img="data.item.IsImage" :name="data.item.ImagePath" :icon="data.item.Icon" :link="data.item.Link"></FileView>
                 </template>
                 <template #cell(actions)="data">
                     <b-button-group>
@@ -45,7 +45,7 @@
                 <b-card v-for="(item,index) in rooms" :key="index">
                     <b-row>
                         <b-col align="center">
-                            <div variant="light" @click="openFile(item.ImagePath)" style="cursor:pointer;">{{item.ImagePath}}</div>
+                            <FileView :is-list="false" :is-img="item.IsImage" :name="item.ImagePath" :icon="item.Icon" :link="item.Link"></FileView>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -84,9 +84,12 @@
 
 <script>
     import roomLogic from '@/logics'
-
+    import fileView from '@/components/FileView.vue';
     export default {
         name: 'Room',
+        components: {
+            FileView: fileView
+        },
         data: function () {
             return {
                 rooms: [],

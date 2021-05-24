@@ -36,6 +36,7 @@
     <Content Include="src\App.vue" />
     <Content Include="src\components\FileManage.vue" />
     <Content Include="src\components\FileSelect.vue" />
+    <Content Include="src\components\FileView.vue" />
     <Content Include="src\logics\CupboardLogic.js" />
     <Content Include="src\logics\index.js">
       <SubType>Code</SubType>

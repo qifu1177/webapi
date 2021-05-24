@@ -17,6 +17,9 @@
                              drop-placeholder="Drop file here..."
                              v-bind:readonly="inputFileReadonly"></b-form-file>
             </div>
+            <p>
+                Upload file type: {{fileSetting.fileTypes}}; maximum size: {{fileSetting.maxSize}} MB.
+            </p>
             <br />
             <div class="row" v-show="showUploadState">
                 <div class="col">
@@ -42,8 +45,8 @@
                     <b-form-checkbox v-model="row.item.selected" @change="selectedChanged(row.item)">
                     </b-form-checkbox>
                 </template>
-                <template #cell(name)="row">
-                    <div @click="openFile(row.item)" variant="light" style="cursor:pointer;">{{row.item.name}}</div>
+                <template #cell(name)="row">                   
+                    <FileView :is-list="true" :is-img="row.item.isImage" :name="row.item.name" :icon="row.item.icon" :link="row.item.link"></FileView>
                 </template>
                 <template #cell(fileType)="row">
                     <div>{{row.item.fileType}}</div>
@@ -76,8 +79,8 @@
             <b-card-group columns>
                 <b-card v-for="(item,index) in searchResults" :key="index">
                     <b-row>
-                        <b-col align="center">
-                            <img v-bind:src="item.icon" v-bind:alt="item.fileType" class="img-small" @click="openFile(item)"/>
+                        <b-col align="center">                           
+                            <FileView :is-list="false" :is-img="item.isImage" :name="item.name" :icon="item.icon" :link="item.link"></FileView>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -112,9 +115,12 @@
 </template>
 <script>
     import logic from '@/logics/Logic'
-
+    import fileView from '@/components/FileView.vue';
     export default {
         name: 'FileManage',
+        components: {
+            FileView: fileView
+        },
         props: {
             selectedFiles: Array,
             moreSelected: Boolean
@@ -168,7 +174,8 @@
                 uploadbackdata: { value: 0, uploadFileName: '', message: '', exception: '', state: window.$UploadFileState.free },
                 outputData: { message: '', exception: '' },
                 searchStr: '',
-                showImg: { src: '', title: '' }
+                fileSetting: {fileTypes:"",maxSize:0}
+                
             }
         },
         watch: {
@@ -202,6 +209,9 @@
                         this.selectedFiles.push(this.fileList[i].name);
                 }
             },
+            loadFileSetting() {
+                logic.loadFileSetting(this.fileSetting);
+            },
             loadSessionId() {
                 logic.loadSessionId(this.session);
             },
@@ -209,9 +219,27 @@
                 this.fileList = [];
                 logic.loadFiles(this.fileList, this.selectedFiles);
             },
+            validFile(selectedFile) {
+                if (selectedFile && selectedFile.name &&
+                    selectedFile.name != this.uploadbackdata.uploadFileName) {
+                    let showErrorMessage = this.$createShowMessage('error', this);
+                    var patt = eval('/(' + this.fileSetting.fileTypes+')$/g');
+                    var res = patt.test(selectedFile.name);
+                    if (!res) {
+                        showErrorMessage('The type of the uploaded file is invalid.');
+                        return false;
+                    }
+                    let maxSize = parseInt(this.fileSetting.maxSize) * 1024 * 1024;
+                    if (maxSize < selectedFile.size) {
+                        showErrorMessage('The uploaded file is too large.');
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            },
             uploadFile(uploadFile) {
-                if (uploadFile && uploadFile.name &&
-                    uploadFile.name != this.uploadbackdata.uploadFileName) {
+                if (this.validFile(uploadFile)) {
                     this.uploadbackdata.value = 0;
                     this.uploadbackdata.message = '';
                     this.uploadbackdata.state = window.$UploadFileState.run;
@@ -242,39 +270,7 @@
                     that.updateUploadState();
                 }, 50);
             },
-
-            toast(item, toaster, append = false) {
-                const h = this.$createElement;
-                const $img = h(
-                    'div',
-                    {
-                        class: 'div-img'
-                    },
-                    [
-                        h('b-img',
-                            {
-                                class: 'img-fluid',
-                                attrs: { src: item.link, alt: item.name }
-                            }, '')
-                    ]
-
-                );
-                this.$bvToast.toast([$img], {
-                    title: `${item.name}`,
-                    toaster: toaster,
-                    solid: true,
-                    appendToast: append,
-                    noAutoHide: true
-                })
-            },
-            openFile(item) {
-                if (item.isImage) {
-                    this.showImg.src = item.link;
-                    this.showImg.title = item.name;
-                    this.toast(item, "b-toaster-top-full", true);
-                } else
-                    window.open(item.link, "_blank");
-            },
+                       
             deleteFile: function (item, button) {
                 window.console.log(button);
                 this.outputData.message = '';
@@ -284,6 +280,7 @@
         beforeMount() {
             logic.init(this.$baseServerUrl);
             logic.setErrorFunc(this.$createShowMessage('error', this));
+            this.loadFileSetting();
             this.loadSessionId();
             this.loadFiles();
         },
