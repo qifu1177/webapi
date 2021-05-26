@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import router from './router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-//import Globalize from 'globalize'
+import { i18n, initVueI18nDirective, loadLanguageAsync } from '@/language'
 import App from './App.vue';
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -12,7 +12,7 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.config.productionTip = true;
 Vue.prototype.$baseServerUrl = 'https://localhost:44356';
-//Vue.prototype.$Globalize = Globalize;
+Vue.prototype.$loadLanguageAsync = loadLanguageAsync;
 Vue.prototype.$createShowMessage = (type, vueComponent) => {
     let variant = 'default';
     switch (type) {
@@ -46,9 +46,12 @@ Vue.prototype.$createShowMessage = (type, vueComponent) => {
         });
     };    
 };
-new Vue({  
+let vue=new Vue({  
     render: h => h(App),
     router,   
+    i18n, 
     BootstrapVue,
     IconsPlugin
-}).$mount('#app');
+});
+initVueI18nDirective(vue);
+vue.$mount('#app');

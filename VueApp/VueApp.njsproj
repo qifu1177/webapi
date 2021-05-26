@@ -37,6 +37,19 @@
     <Content Include="src\components\FileManage.vue" />
     <Content Include="src\components\FileSelect.vue" />
     <Content Include="src\components\FileView.vue" />
+	<Content Include="src\language\deDE\dateTimeFormats.js" />
+    <Content Include="src\language\deDE\index.js" />
+    <Content Include="src\language\deDE\messages.js" />
+    <Content Include="src\language\deDE\numberFormats.js" />
+    <Content Include="src\language\enUS\dateTimeFormats.js" />
+    <Content Include="src\language\enUS\index.js" />
+    <Content Include="src\language\enUS\messages.js" />
+    <Content Include="src\language\enUS\numberFormats.js" />
+    <Content Include="src\language\index.js" />
+	<Content Include="src\language\zhCN\dateTimeFormats.js" />
+    <Content Include="src\language\zhCN\index.js" />
+    <Content Include="src\language\zhCN\messages.js" />
+    <Content Include="src\language\zhCN\numberFormats.js" />
     <Content Include="src\logics\CupboardLogic.js" />
     <Content Include="src\logics\index.js">
       <SubType>Code</SubType>
@@ -63,7 +76,11 @@
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\language\enUS\" />
+    <Folder Include="src\language\deDE\" />
+    <Folder Include="src\language\zhCN\" />
     <Folder Include="src\logics\" />
+    <Folder Include="src\language\" />
     <Folder Include="src\services\" />
     <Folder Include="src\views\" />
     <Folder Include="src\router\" />

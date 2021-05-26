@@ -14,8 +14,11 @@
                 <template v-slot:cell(Name)="data">
                     <div variant="light">{{data.item.Name}}</div>
                 </template>
-                <template v-slot:cell(ImagePath)="data">                    
+                <template v-slot:cell(ImagePath)="data">
                     <FileView :is-list="true" :is-img="data.item.IsImage" :name="data.item.ImagePath" :icon="data.item.Icon" :link="data.item.Link"></FileView>
+                </template>
+                <template v-slot:cell(TS)="data">
+                    <div variant="light" v-df="{'val':data.item.TS,'f':'long'}"></div>
                 </template>
                 <template #cell(actions)="data">
                     <b-button-group>
