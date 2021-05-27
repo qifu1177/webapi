@@ -28,29 +28,53 @@ function initVueI18nDirective(obj) {
         return node;
     }
     Vue.directive('t', {
-        bind: function (el, binding, vnode) {
-            window.console.log(el.innerHTML);
-            let node = getLastVnode(vnode);
-            node.text = obj.$t(binding.value);
+        bind: function (el, binding) {            
+            let node = getLastNode(el);
+            node.innerHTML = obj.$t(binding.value);
         },
-        update: function (el, binding, vnode) {
-            window.console.log(el.innerHTML);
+        update: function (el, binding, vnode) {           
             let node = getLastVnode(vnode);
             node.text = obj.$t(binding.value);
+        }
+    });
+    Vue.directive('tp', {
+        bind: function (el, binding) {
+            let node = getLastNode(el);
+            node.innerHTML = obj.$t(binding.value.val,binding.value.p);
+        },
+        update: function (el, binding, vnode) {           
+            let node = getLastVnode(vnode);
+            node.text = obj.$t(binding.value.val, binding.value.p);
+        }
+    });
+    Vue.directive('tc', {
+        bind: function (el, binding) {
+            let node = getLastNode(el);
+            node.innerHTML = obj.$tc(binding.value.val, binding.value.count);
+        },
+        update: function (el, binding, vnode) {           
+            let node = getLastVnode(vnode);
+            node.text = obj.$tc(binding.value.val, binding.value.count);
         }
     });
     Vue.directive('nf', {
-        bind: function (el, binding, vnode) {
-            window.console.log(vnode);
+        bind: function (el, binding) {
             let node = getLastNode(el);
             node.innerHTML = obj.$n(binding.value.val, binding.value.f);
+        },
+        update: function (el, binding, vnode) {            
+            let node = getLastVnode(vnode);
+            node.text = obj.$n(binding.value.val, binding.value.f);
         }
     });
     Vue.directive('df', {
-        bind: function (el, binding, vnode) {
-            window.console.log(vnode);
+        bind: function (el, binding) {
             let node = getLastNode(el);
             node.innerHTML = obj.$d(binding.value.val, binding.value.f);
+        },
+        update: function (el, binding, vnode) {           
+            let node = getLastVnode(vnode);
+            node.text = obj.$d(binding.value.val, binding.value.f);
         }
     });
 }

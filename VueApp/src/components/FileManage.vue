@@ -51,8 +51,8 @@
                 <template #cell(fileType)="row">
                     <div>{{row.item.fileType}}</div>
                 </template>
-                <template #cell(size)="row">
-                    <div>{{sizeToMb(row.item.size)}}</div>
+                <template #cell(size)="row" >
+                    <div v-nf="{'val':sizeToMb(row.item.size)}"></div>
                 </template>
 
                 <template #cell(actions)="row">

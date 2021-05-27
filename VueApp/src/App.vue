@@ -14,18 +14,20 @@
                     <!-- Right aligned nav items -->
                     <b-navbar-nav class="ml-auto">
                         <b-nav-form>
-                            <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-                            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+                            <b-input-group>
+                                <b-form-input placeholder="Search" @focus="showSelectView()"></b-form-input>
+                                <b-input-group-prepend is-text variant="light"><b-icon variant="success" icon="search"></b-icon></b-input-group-prepend>
+                            </b-input-group>
                         </b-nav-form>
 
                         <b-nav-item-dropdown v-bind:text="currentLanguage.name" right>
-                            <b-dropdown-item v-for="(item,index) in showLanguageList" :key="index" @click="changeLanguage(item.val)">{{item.name}}</b-dropdown-item>                                             
-                        </b-nav-item-dropdown>                        
+                            <b-dropdown-item v-for="(item,index) in showLanguageList" :key="index" @click="changeLanguage(item.val)">{{item.name}}</b-dropdown-item>
+                        </b-nav-item-dropdown>
                     </b-navbar-nav>
                 </b-collapse>
             </b-navbar>
         </div>
-             
+
         <router-view></router-view>
     </div>
 </template>
@@ -40,7 +42,8 @@
                     { val: 'en-US', name: 'English', isSelected: true },
                     { val: 'de-DE', name: 'Deutsch', isSelected: false },
                     { val: 'zh-CN', name: '中文', isSelected: false }
-                ]
+                ],
+                searchText:''
             }
         },
         computed: {
@@ -57,13 +60,50 @@
             changeLanguage(lang) {
                 if (this.currentLanguage.val == lang)
                     return;
-                this.currentLanguage.val = lang;                
+                this.currentLanguage.val = lang;
                 for (let i = 0; i < this.languageList.length; i++) {
                     this.languageList[i].isSelected = (this.languageList[i].val == lang);
                     if (this.languageList[i].isSelected)
                         this.currentLanguage.name = this.languageList[i].name;
                 }
                 this.$loadLanguageAsync(lang);
+            },
+            toast(toaster, append = false) {
+                const h = this.$createElement;
+                const $div = h(
+                    'b-input-group',
+                    {
+                        class: 'mt-3'
+                    },
+                    [
+                        h('b-form-input',
+                            {
+                                attrs: { 'id': 'nav_search_text_input' }
+                            }, ''),
+                        h('b-input-group-append', {},
+                            [
+                                h('b-button', { on: { click: () => this.search() }}, [h('b-icon', { attrs: { icon: 'search' }})])                               
+                            ])
+
+                    ]
+
+                );
+                this.$bvToast.toast([$div], {
+                    id:'nav_search_toast',
+                    title: `${this.$t('search')}`,
+                    toaster: toaster,
+                    solid: true,
+                    appendToast: append,
+                    noAutoHide: true
+                })
+            },
+            showSelectView() {
+                this.toast("b-toaster-top-full", true);
+            },
+            search() {
+                let searchText = document.getElementById('nav_search_text_input').value;
+                window.console.log(searchText);
+                this.$bvToast.hide('nav_search_toast');
             }
         },
         beforeMount() {

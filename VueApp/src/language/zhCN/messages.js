@@ -1,7 +1,7 @@
 const messages = {
     'zh-CN': {
-        home: 'Home',
-        room: 'Room'
+        home: '家',
+        room: '房间'
     }
 };
 export default messages;
