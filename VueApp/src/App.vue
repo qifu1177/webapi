@@ -15,7 +15,7 @@
                     <b-navbar-nav class="ml-auto">
                         <b-nav-form>
                             <b-input-group>
-                                <b-form-input placeholder="Search" @focus="showSelectView()"></b-form-input>
+                                <b-form-input placeholder="Search" @focus="showSearch()"></b-form-input>
                                 <b-input-group-prepend is-text variant="light"><b-icon variant="success" icon="search"></b-icon></b-input-group-prepend>
                             </b-input-group>
                         </b-nav-form>
@@ -27,7 +27,20 @@
                 </b-collapse>
             </b-navbar>
         </div>
-
+        <b-alert v-model="showSearchDiv"
+                 class="position-fixed fixed-top m-0 rounded-0"
+                 style="z-index: 2000;"
+                 variant="success"
+                 dismissible>
+            <b-input-group class='mt-3'>
+                <b-form-input ref="navbarSearchTextInput" :type="'search'" v-model="searchText"></b-form-input>
+                <b-input-group-append>
+                    <b-button @click="search()">
+                        <b-icon icon="search"></b-icon>
+                    </b-button>
+                </b-input-group-append>
+            </b-input-group>
+        </b-alert>
         <router-view></router-view>
     </div>
 </template>
@@ -43,6 +56,7 @@
                     { val: 'de-DE', name: 'Deutsch', isSelected: false },
                     { val: 'zh-CN', name: '中文', isSelected: false }
                 ],
+                showSearchDiv: false,
                 searchText:''
             }
         },
@@ -67,43 +81,20 @@
                         this.currentLanguage.name = this.languageList[i].name;
                 }
                 this.$loadLanguageAsync(lang);
+            },           
+            search() {               
+                window.console.log(this.searchText);
+                this.showSearchDiv = false;
+                this.$router.push({ path: 'search', query: { text: this.searchText } });
             },
-            toast(toaster, append = false) {
-                const h = this.$createElement;
-                const $div = h(
-                    'b-input-group',
-                    {
-                        class: 'mt-3'
-                    },
-                    [
-                        h('b-form-input',
-                            {
-                                attrs: { 'id': 'nav_search_text_input' }
-                            }, ''),
-                        h('b-input-group-append', {},
-                            [
-                                h('b-button', { on: { click: () => this.search() }}, [h('b-icon', { attrs: { icon: 'search' }})])                               
-                            ])
-
-                    ]
-
-                );
-                this.$bvToast.toast([$div], {
-                    id:'nav_search_toast',
-                    title: `${this.$t('search')}`,
-                    toaster: toaster,
-                    solid: true,
-                    appendToast: append,
-                    noAutoHide: true
-                })
-            },
-            showSelectView() {
-                this.toast("b-toaster-top-full", true);
-            },
-            search() {
-                let searchText = document.getElementById('nav_search_text_input').value;
-                window.console.log(searchText);
-                this.$bvToast.hide('nav_search_toast');
+            showSearch() {
+                this.showSearchDiv = true;
+                let that = this;
+                window.setTimeout(function () {                    
+                    let input = that.$refs.navbarSearchTextInput;
+                    input.focus();
+                }, 50);
+                
             }
         },
         beforeMount() {
