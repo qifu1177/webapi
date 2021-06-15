@@ -24,12 +24,16 @@ namespace BLL.Models
             get { return _cupboards; }
 
         }
-        public List<Dal.Models.Cupboard> Dal_Cupboard
+        public ICollection<Dal.Models.Cupboard> Dal_Cupboard
         {
             set
             {
                 _cupboards.Clear();
-                value.ForEach(item => _cupboards.Add(new Cupboard { CupboardId = item.CupboardId, RoomId = item.RoomId, Name = item.Name, Wide = item.Wide, Height = item.Height }));
+                foreach (var item in value)
+                {
+                    _cupboards.Add(new Cupboard { CupboardId = item.CupboardId, RoomId = item.RoomId, Name = item.Name, Wide = item.Wide, Height = item.Height });
+                }
+
             }
         }
         public double TS { get; set; }

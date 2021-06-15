@@ -7,6 +7,8 @@ import RoomEdit from "@/views/RoomEdit.vue"
 import Cupboard from "@/views/Cupboard.vue"
 import Thing from "@/views/Thing.vue"
 import Search from "@/views/Search.vue"
+import Login from "@/views/Login.vue"
+import Register from "@/views/Register.vue"
 
 vue.use(vueRouter);
 const pageNotFound = { template: '<p>page not found!</p>' }
@@ -17,6 +19,8 @@ const routes = [
     { path: '/cupboard', component: Cupboard },
     { path: '/thing', component: Thing },
     { path: '/search', component: Search },
+    { path: '/user/login', component: Login },
+    { path: '/user/registe', component: Register },
     {
         path: '*',
         component: pageNotFound,

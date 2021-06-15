@@ -278,7 +278,7 @@
             }
         },
         beforeMount() {
-            logic.init(this.$baseServerUrl);
+            logic.init(this.$config.baseServerUrl);
             logic.setErrorFunc(this.$createShowMessage('error', this));
             this.loadFileSetting();
             this.loadSessionId();

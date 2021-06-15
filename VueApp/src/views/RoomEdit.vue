@@ -85,7 +85,7 @@
             
         },
         beforeMount() {
-            roomLogic.init(this.$baseServerUrl);
+            roomLogic.init(this.$config.baseServerUrl);
             roomLogic.setErrorFunc(this.$createShowMessage('error', this));
             this.loadSessionId();           
         }

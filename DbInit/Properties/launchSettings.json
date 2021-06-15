@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DbInit": {
+      "commandName": "Project",
+      "commandLineArgs": "constr=\"Server=THREE\\SQLEXPRESS;Database=ApartmentDB;User Id=sa;Password=sa;\" Email=qifu1177@gmail.com psw=qWe123// un=qifu"
+    }
+  }
+}

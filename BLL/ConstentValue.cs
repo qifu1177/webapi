@@ -6,7 +6,12 @@ namespace BLL
 {
     public class ConstentValue
     {
+        public const string EMAIL_PATTERN= @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
         public static DateTime JSZeroDt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        //Error Message
+        public const string USER_LOGIN_EMAIL_OR_PASSWORD_ERROR= "EMAIL_OR_PASSWORD_ERROR";
+        public const string USER_REGISTER_EMAIL_ERROR = "EMAIL_EXIST_ERROR";
+        public const string USER_REGISTER_ROLE_ERROR = "EMAIL_ROLE_ERROR";
     }
     public static class DateTimeExtensions
     {

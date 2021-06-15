@@ -20,17 +20,6 @@ namespace BLL
             }
         }
         
-    }
-    public class Test : Singleton<Test>
-    {
-        public void DoSomething(int n, string name)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException("Name is blank.", "name");
-            }
-            //...
-        }
-    }
+    }    
     
 }

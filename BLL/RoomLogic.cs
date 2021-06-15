@@ -1,6 +1,5 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
-using Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
@@ -14,19 +13,19 @@ namespace BLL
 {
     public class RoomLogic : AbstractLogic<RoomLogic>, DBInterface
     {
-        private string _conStr;
+       
         public RoomLogic() : base()
         {
         }
         public RoomLogic(string conStr)
         {
-            _conStr = conStr;
+            _connectStr = conStr;
         }
         public string All(string path, string url)
         {
             string str = "";
             List<Room> list = new List<Room>();
-            using (DataContext context = new DataContext(_conStr))
+            using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
             {
                 list = context.Rooms.Include(r => r.Cupboards)
                         .Select(room => new Room
@@ -40,16 +39,17 @@ namespace BLL
                         ,
                             Dal_Cupboard = room.Cupboards
                         ,
-                            TS = room.TS.ToJsTime()
+                            TS = room.CreateTs.ToJsTime()
                         }).ToList();
             }
             str = JsonConvert.SerializeObject(list, Formatting.None);
             return str;
         }
 
+        
         public void DeleteWithId(int id)
         {
-            using (DataContext context = new DataContext(_conStr))
+            using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
             {
                 var room = context.Rooms.Single(r => r.RoomId == id);
                 context.Rooms.Remove(room);
@@ -77,18 +77,13 @@ namespace BLL
             {
                 room.Name = dic["Name"][0];
             }
-            if (dic.ContainsKey("TS") && dic["TS"].Count > 0)
-            {
-                if (!string.IsNullOrEmpty(dic["TS"][0]))
-                {
-                    room.TS = DateTimeExtensions.CreateFromJsTime(Convert.ToDouble(dic["TS"][0]));
-                }
-            }
+            
+
             return room;
         }
         public void Insert(Dictionary<string, StringValues> dic)
         {
-            using (DataContext context = new DataContext(_conStr))
+            using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
             {
                 context.Rooms.Add(this.CreateRoom(dic));
                 context.SaveChanges();
@@ -97,7 +92,7 @@ namespace BLL
 
         public void Update(Dictionary<string, StringValues> dic)
         {
-            using (DataContext context = new DataContext(_conStr))
+            using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
             {
                 Dal.Models.Room room = this.CreateRoom(dic);
                 var old = context.Rooms.Single(r => r.RoomId == room.RoomId);

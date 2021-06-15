@@ -5,13 +5,10 @@ using System.Collections.Generic;
 
 namespace Dal.Models
 {
-    public partial class Thing
+    public partial class AppSession
     {
-        public int ThingId { get; set; }
+        public string SessionId { get; set; }
         public string UserId { get; set; }
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-        public string ImagePath { get; set; }
         public DateTime CreateTs { get; set; }
         public DateTime UpdateTs { get; set; }
 

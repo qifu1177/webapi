@@ -6,7 +6,10 @@
 
 <script>
     export default {
-        name: 'Home'
+        name: 'Home',
+        beforeCreate() {            
+            this.$base.loginCheck();
+        }
     };
 </script>
 

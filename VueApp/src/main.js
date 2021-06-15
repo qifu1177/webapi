@@ -2,6 +2,9 @@ import Vue from 'vue';
 import router from './router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { i18n, initVueI18nDirective, loadLanguageAsync } from '@/language'
+import { store, CreateBaseFunctions } from '@/basefunc'
+import config from '@/config'
+import ConstString from "@/const"
 import App from './App.vue';
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -11,7 +14,6 @@ import './app.css'
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.config.productionTip = true;
-Vue.prototype.$baseServerUrl = 'https://localhost:44356';
 Vue.prototype.$loadLanguageAsync = loadLanguageAsync;
 Vue.prototype.$createShowMessage = (type, vueComponent) => {
     let variant = 'default';
@@ -46,12 +48,18 @@ Vue.prototype.$createShowMessage = (type, vueComponent) => {
         });
     };    
 };
+Vue.prototype.$config = config;
+Vue.prototype.$const = ConstString;
+
 let vue=new Vue({  
     render: h => h(App),
     router,   
     i18n, 
+    store, 
     BootstrapVue,
     IconsPlugin
 });
+
+Vue.prototype.$base = CreateBaseFunctions(vue);
 initVueI18nDirective(vue);
 vue.$mount('#app');

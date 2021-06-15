@@ -1,6 +1,7 @@
 import Vue from "vue"
 import VueI18n from 'vue-i18n'
 import axios from 'axios'
+import ConstString from "@/const"
 import { messages, dateTimeFormats, numberFormats } from '@/language/enUS'
 Vue.use(VueI18n);
 
@@ -85,7 +86,7 @@ function setI18nLanguage(lang) {
     i18n.locale = lang; 
     axios.defaults.headers.common['Accept-Language'] = lang;
     document.querySelector('html').setAttribute('lang', lang);
-    window.localStorage.setItem('CurrentLanguage', lang);
+    window.localStorage.setItem(ConstString.CurrentLanguage, lang);
     return lang
 }
 

@@ -1,13 +1,14 @@
-import http from '@/services'
+import { http, data } from '@/services'
 window.$UploadFileState = { free: 0, run: 1, successful: 2, fail: 3 };
-function Logic() {
-    this.baseUrl = "";
+function Logic() {    
     let that = this;
-    this.init = (baseUrl) => {
-        this.baseUrl = baseUrl;
-        http.init(baseUrl + '/data');
+    this.http = http;
+    this.data = data;
+    this.init = (baseUrl) => {        
+        http.init(baseUrl);
+        data.init(baseUrl);
     };
-    this.data = http;
+    
     this.errorFunc = function (response) {
         window.console.log(response);
     };
@@ -15,10 +16,11 @@ function Logic() {
         this.errorFunc = func;
     }
     this.loadSessionId = function (session) {
-        this.data.get(this.data.baseUrl + '/sessionid').then((sessionId) => session.id = sessionId, this.errorFunc);
+        data.get(data.baseUrl + '/sessionid').then((sessionId) => session.id = sessionId, this.errorFunc);
     };
     this.uploadFile = (sessionId, inputfile, backData) => {
-        this.data.uploadFile(sessionId, inputfile).then((message) => {
+        let url = http.baseUrl + '/file';
+        http.uploadFile(url,sessionId, inputfile).then((message) => {
             backData.message = message;
             if (message == "OK")
                 backData.state = window.$UploadFileState.successful;
@@ -33,14 +35,14 @@ function Logic() {
             });
     };
     this.loadFileSetting = (setting) => {
-        let url = this.baseUrl + '/file/setting';
+        let url = http.baseUrl + '/file/setting';
         http.get(url).then((obj) => {            
             setting["fileTypes"] = obj.filetypes;
             setting["maxSize"] = obj.maxsize;
         }, this.errorFunc);
     }
     this.loadFiles = (fileList, selectedFiles) => {
-        let url = this.baseUrl + '/file/files';
+        let url = http.baseUrl + '/file/files';
         http.get(url).then((datas) => {
             for (let i = 0; i < datas.length; i++) {                         
                 datas[i]['selected'] = selectedFiles.includes(datas[i].name);
@@ -50,7 +52,7 @@ function Logic() {
         }, this.errorFunc);
     };
     this.deleteFile = (filename, backData) => {
-        let url = this.baseUrl + '/file/' + filename;
+        let url = http.baseUrl + '/file/' + filename;
         http.delete(url).then((message) => {
             backData.message = message;
         }, (response) => {
