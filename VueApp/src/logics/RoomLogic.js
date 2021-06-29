@@ -1,7 +1,7 @@
 import logic from '@/logics/Logic'
 function RoomLogic() {    
-    this.loadRooms = (list) => {
-        this.data.all('Room').then(function (datas) {
+    this.loadRooms = (sessionId,list) => {
+        this.data.all('Room', sessionId).then(function (datas) {
             list.splice(0, list.length);
             for (let i = 0; i < datas.length; i++) {
                 let item = datas[i];

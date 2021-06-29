@@ -26,10 +26,12 @@ namespace BLL
             string backStr = "";
             using(Dal.Models.DataContext context =new Dal.Models.DataContext(_connectStr))
             {
-                var user=context.AppUsers.Where(item => item.Email == email && item.Password == password).First();
-                if (user == null)
-                {
-                    backStr = ConstentValue.USER_LOGIN_EMAIL_OR_PASSWORD_ERROR;
+                var users=context.AppUsers.Where(item => item.Email == email && item.Password == password).ToArray();
+                if (users.Length == 0)
+                {                   
+                    dynamic resulte = new ExpandoObject();
+                    resulte.message = ConstentValue.USER_LOGIN_EMAIL_OR_PASSWORD_ERROR;                    
+                    backStr = JsonConvert.SerializeObject(resulte, Formatting.None);
                 }
                 else
                 {
@@ -45,7 +47,7 @@ namespace BLL
                             MonduleName = moduleRight.MonduleName,
                             Right = moduleRight.Right,
                             UserId = user.UserId
-                        }).Where(moduleUser => moduleUser.UserId == user.UserId);
+                        }).Where(moduleUser => moduleUser.UserId == users[0].UserId);
                     List<dynamic> list = new List<dynamic>();
                     foreach (var moduleUser in query)
                     {
@@ -56,7 +58,8 @@ namespace BLL
                     }
                     dynamic resulte = new ExpandoObject();
                     resulte.message = "OK";
-                    resulte.sessionId = CreateSession(context, user.UserId);
+                    resulte.sessionId = CreateSession(context, users[0].UserId);
+                    resulte.userName = users[0].UserName;
                     resulte.loginTs = DateTime.UtcNow.ToJsTime();
                     resulte.modules= list;               
                     backStr = Newtonsoft.Json.JsonConvert.SerializeObject(resulte, Formatting.None);
@@ -90,8 +93,8 @@ namespace BLL
             {
                 using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
                 {
-                    var user = context.AppUsers.Single(item => item.Email == email);
-                    b = user == null;
+                   int count = context.AppUsers.Where(item => item.Email == email).Count();
+                    b = count==0;
 
                 }
             }            
@@ -133,6 +136,23 @@ namespace BLL
                 }
             }
             return backStr;
+        }
+        public string GetUserId(string sessionid)
+        {
+            string userId = string.Empty;
+            if (string.IsNullOrEmpty(sessionid))
+                return userId;
+            using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
+            {
+                Dal.Models.AppSession[] sessions=context.AppSessions.Where(item=>context.AppSessions.Where(ss=>ss.SessionId==sessionid).Select(ss=>ss.UserId).Contains(item.UserId)).OrderByDescending(item=>item.UpdateTs).Take(1).ToArray();
+                if(sessions.Length==1)
+                {
+                    if (sessionid == sessions[0].SessionId)
+                        userId = sessions[0].UserId;
+                }               
+   
+            }
+            return userId;
         }
     }
 }

@@ -35,8 +35,9 @@
     <Content Include="src\app.scss" />
     <Content Include="src\App.vue" />
     <Content Include="src\basefunc\base.js" />
+    <Content Include="src\basefunc\baseView.js" />
     <Content Include="src\basefunc\index.js" />
-    <Content Include="src\basefunc\store.js" />
+    <Content Include="src\basefunc\initDirective.js" />
     <Content Include="src\components\FileManage.vue" />
     <Content Include="src\components\FileSelect.vue" />
     <Content Include="src\components\FileView.vue" />
@@ -69,11 +70,14 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\services\user.js" />
+    <Content Include="src\states\index.js" />
+    <Content Include="src\states\authenticate\index.js" />
     <Content Include="src\views\Cupboard.vue" />
     <Content Include="src\views\Home.vue" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="src\views\Login.vue" />
+    <Content Include="src\views\Profile.vue" />
     <Content Include="src\views\Register.vue" />
     <Content Include="src\views\Room.vue">
       <SubType>Code</SubType>
@@ -97,7 +101,9 @@
     <Folder Include="src\basefunc\" />
     <Folder Include="src\config\" />
     <Folder Include="src\const\" />
+    <Folder Include="src\states\" />
     <Folder Include="src\services\" />
+    <Folder Include="src\states\authenticate\" />
     <Folder Include="src\views\" />
     <Folder Include="src\router\" />
   </ItemGroup>

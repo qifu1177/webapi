@@ -7,6 +7,7 @@ function Logic() {
     this.init = (baseUrl) => {        
         http.init(baseUrl);
         data.init(baseUrl);
+        return this;
     };
     
     this.errorFunc = function (response) {
@@ -14,10 +15,7 @@ function Logic() {
     };
     this.setErrorFunc = function (func) {
         this.errorFunc = func;
-    }
-    this.loadSessionId = function (session) {
-        data.get(data.baseUrl + '/sessionid').then((sessionId) => session.id = sessionId, this.errorFunc);
-    };
+    }    
     this.uploadFile = (sessionId, inputfile, backData) => {
         let url = http.baseUrl + '/file';
         http.uploadFile(url,sessionId, inputfile).then((message) => {
@@ -34,15 +32,15 @@ function Logic() {
                 that.errorFunc(backData);
             });
     };
-    this.loadFileSetting = (setting) => {
-        let url = http.baseUrl + '/file/setting';
-        http.get(url).then((obj) => {            
-            setting["fileTypes"] = obj.filetypes;
-            setting["maxSize"] = obj.maxsize;
-        }, this.errorFunc);
-    }
-    this.loadFiles = (fileList, selectedFiles) => {
-        let url = http.baseUrl + '/file/files';
+    //this.loadFileSetting = (setting) => {
+    //    let url = http.baseUrl + '/file/setting';
+    //    http.get(url).then((obj) => {            
+    //        setting["fileTypes"] = obj.filetypes;
+    //        setting["maxSize"] = obj.maxsize;
+    //    }, this.errorFunc);
+    //}
+    this.loadFiles = (sessionid,fileList, selectedFiles) => {
+        let url = http.baseUrl + '/file/files/' + sessionid;
         http.get(url).then((datas) => {
             for (let i = 0; i < datas.length; i++) {                         
                 datas[i]['selected'] = selectedFiles.includes(datas[i].name);

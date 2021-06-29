@@ -9,6 +9,7 @@ import Thing from "@/views/Thing.vue"
 import Search from "@/views/Search.vue"
 import Login from "@/views/Login.vue"
 import Register from "@/views/Register.vue"
+import Profile from "@/views/Profile.vue"
 
 vue.use(vueRouter);
 const pageNotFound = { template: '<p>page not found!</p>' }
@@ -21,6 +22,7 @@ const routes = [
     { path: '/search', component: Search },
     { path: '/user/login', component: Login },
     { path: '/user/registe', component: Register },
+    { path: '/user/profile', component: Profile },
     {
         path: '*',
         component: pageNotFound,

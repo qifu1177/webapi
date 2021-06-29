@@ -1,8 +1,10 @@
 ﻿using BLL;
+using BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,21 @@ namespace WebApi.Controllers
         public UserController(IConfiguration configuration, ILogger<DataController> logger) : base(configuration, logger)
         {
 
+        }
+        [HttpGet("config")]
+        public IActionResult GetUserSetting()
+        {
+            try
+            {
+                dynamic setting = ConfigService.Instance.GetUserSettings(_configuration);
+                string str=Newtonsoft.Json.JsonConvert.SerializeObject(setting, Formatting.None);
+                return Ok(str);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
         [HttpGet("login/{email}")]
         public IActionResult Login(string email)

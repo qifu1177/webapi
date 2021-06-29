@@ -13,7 +13,7 @@ const i18n = new VueI18n({
     numberFormats
 });
 
-function initVueI18nDirective(obj) {
+function initVueI18nDirective(vueInstance) {
     function getLastNode(el) {
         let node = el;
         while (node.firstChild) {
@@ -31,51 +31,51 @@ function initVueI18nDirective(obj) {
     Vue.directive('t', {
         bind: function (el, binding) {            
             let node = getLastNode(el);
-            node.innerHTML = obj.$t(binding.value);
+            node.innerHTML = vueInstance.$t(binding.value);
         },
         update: function (el, binding, vnode) {           
             let node = getLastVnode(vnode);
-            node.text = obj.$t(binding.value);
+            node.text = vueInstance.$t(binding.value);
         }
     });
     Vue.directive('tp', {
         bind: function (el, binding) {
             let node = getLastNode(el);
-            node.innerHTML = obj.$t(binding.value.val,binding.value.p);
+            node.innerHTML = vueInstance.$t(binding.value.val,binding.value.p);
         },
         update: function (el, binding, vnode) {           
             let node = getLastVnode(vnode);
-            node.text = obj.$t(binding.value.val, binding.value.p);
+            node.text = vueInstance.$t(binding.value.val, binding.value.p);
         }
     });
     Vue.directive('tc', {
         bind: function (el, binding) {
             let node = getLastNode(el);
-            node.innerHTML = obj.$tc(binding.value.val, binding.value.count);
+            node.innerHTML = vueInstance.$tc(binding.value.val, binding.value.count);
         },
         update: function (el, binding, vnode) {           
             let node = getLastVnode(vnode);
-            node.text = obj.$tc(binding.value.val, binding.value.count);
+            node.text = vueInstance.$tc(binding.value.val, binding.value.count);
         }
     });
     Vue.directive('nf', {
         bind: function (el, binding) {
             let node = getLastNode(el);
-            node.innerHTML = obj.$n(binding.value.val, binding.value.f);
+            node.innerHTML = vueInstance.$n(binding.value.val, binding.value.f);
         },
         update: function (el, binding, vnode) {            
             let node = getLastVnode(vnode);
-            node.text = obj.$n(binding.value.val, binding.value.f);
+            node.text = vueInstance.$n(binding.value.val, binding.value.f);
         }
     });
     Vue.directive('df', {
         bind: function (el, binding) {
             let node = getLastNode(el);
-            node.innerHTML = obj.$d(binding.value.val, binding.value.f);
+            node.innerHTML = vueInstance.$d(binding.value.val, binding.value.f);
         },
         update: function (el, binding, vnode) {           
             let node = getLastVnode(vnode);
-            node.text = obj.$d(binding.value.val, binding.value.f);
+            node.text = vueInstance.$d(binding.value.val, binding.value.f);
         }
     });
 }

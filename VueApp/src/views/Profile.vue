@@ -1,15 +1,13 @@
 <template>
-    <div class="home" v-t="'home'">
-        
+    <div class="home" v-t="'Profile'">
+
     </div>
 </template>
 
 <script>
     export default {
-        name: 'Home',
-        beforeCreate() {            
-            this.$base.loginCheck();            
-        }
+        name: 'Profile',
+       
     };
 </script>
 

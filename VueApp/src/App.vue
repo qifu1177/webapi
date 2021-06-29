@@ -4,7 +4,7 @@
             <b-navbar toggleable="lg" type="dark" variant="info">
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
                 <b-collapse id="nav-collapse" is-nav>
-                    <b-navbar-nav>
+                    <b-navbar-nav v-if="IsLogined">
                         <b-nav-item to="/" v-t="'home'"></b-nav-item>
                         <b-nav-item to="/room" v-t="'room'"></b-nav-item>
                         <b-nav-item to="/cupboard">Cupboard</b-nav-item>
@@ -13,7 +13,7 @@
 
                     <!-- Right aligned nav items -->
                     <b-navbar-nav class="ml-auto">
-                        <b-nav-form>
+                        <b-nav-form v-if="IsLogined">
                             <b-input-group>
                                 <b-form-input placeholder="Search" @focus="showSearch()"></b-form-input>
                                 <b-input-group-prepend is-text variant="light"><b-icon variant="success" icon="search"></b-icon></b-input-group-prepend>
@@ -23,7 +23,16 @@
                         <b-nav-item-dropdown v-bind:text="currentLanguage.name" right>
                             <b-dropdown-item v-for="(item,index) in showLanguageList" :key="index" @click="changeLanguage(item.val)">{{item.name}}</b-dropdown-item>
                         </b-nav-item-dropdown>
+                        <b-nav-item-dropdown right v-if="IsLogined">
+                            <!-- Using 'button-content' slot -->
+                            <template #button-content>
+                                <b-icon icon="person"></b-icon>
+                            </template>
+                            <b-dropdown-item @click="goToProfile()">{{UserName}}</b-dropdown-item>
+                            <b-dropdown-item @click="logout()">{{$t('logout')}}</b-dropdown-item>
+                        </b-nav-item-dropdown>
                     </b-navbar-nav>
+                    
                 </b-collapse>
             </b-navbar>
         </div>
@@ -46,6 +55,9 @@
 </template>
 
 <script>
+    import { createNamespacedHelpers } from 'vuex';
+    const { mapGetters } = createNamespacedHelpers('authenticate');
+   
     export default {
         name: 'app',
         data: function () {
@@ -57,10 +69,14 @@
                     { val: 'zh-CN', name: '中文', isSelected: false }
                 ],
                 showSearchDiv: false,
-                searchText:''
+                searchText: ''
             }
         },
         computed: {
+            ...mapGetters({
+                IsLogined: "IsLogined",
+                UserName:'UserName'
+            }),
             showLanguageList() {
                 let list = [];
                 for (let i = 0; i < this.languageList.length; i++) {
@@ -81,8 +97,8 @@
                         this.currentLanguage.name = this.languageList[i].name;
                 }
                 this.$loadLanguageAsync(lang);
-            },           
-            search() {               
+            },
+            search() {
                 window.console.log(this.searchText);
                 this.showSearchDiv = false;
                 this.$router.push({ path: 'search', query: { text: this.searchText } });
@@ -90,16 +106,28 @@
             showSearch() {
                 this.showSearchDiv = true;
                 let that = this;
-                window.setTimeout(function () {                    
+                window.setTimeout(function () {
                     let input = that.$refs.navbarSearchTextInput;
                     input.focus();
                 }, 50);
-                
+
+            },
+            logout() {
+                this.$store.commit("authenticate/Logout", {
+                    LoginInfo: this.$const.LoginInfo,
+                    Logout: () => {
+                        this.$router.push({ path: '/user/login', query: {} });
+                    },
+                });
+            },
+            goToProfile() {
+                this.$router.push({ path: '/user/profile', query: {} });
             }
         },
         beforeMount() {
             let lang = window.localStorage.getItem('CurrentLanguage');
-            this.changeLanguage(lang);
+            if (lang)
+                this.changeLanguage(lang);
         }
     };
 </script>

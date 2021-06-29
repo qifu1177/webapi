@@ -88,7 +88,10 @@
 <script>
     import roomLogic from '@/logics'
     import fileView from '@/components/FileView.vue';
-    export default {
+    import { createBaseViewObj } from "@/basefunc";
+    //import { createNamespacedHelpers } from 'vuex';
+    //const { mapGetters } = createNamespacedHelpers('authenticate');
+    export default createBaseViewObj({
         name: 'Room',
         components: {
             FileView: fileView
@@ -116,7 +119,10 @@
                 showList: true
             }
         },
-        computed: {            
+        computed: {
+            //...mapGetters({
+            //    SessionId: "SessionId"
+            //}),
         },
         watch: {
             outputData: {
@@ -131,7 +137,7 @@
         },
         methods: {
             loadRooms: function () {
-                roomLogic.loadRooms(this.rooms);               
+                roomLogic.loadRooms(this.SessionId, this.rooms);
             },
             Create: function () {
                 let room = {
@@ -159,5 +165,8 @@
             roomLogic.setErrorFunc(this.$createShowMessage('error', this));
             this.loadRooms();
         },
-    };
+        //beforeCreate() {
+        //    this.$base.loginCheck();
+        //}
+    });
 </script>

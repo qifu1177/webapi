@@ -3,7 +3,7 @@
     <b-container fluid v-if="showForm">
         <br />
         <b-form-group :invalid-feedback="error.email.message" :state="error.email.state">
-            <b-form-input ref="emailInput" v-model="form.email" v-bind:placeholder="$t('input_email')" :type="'email'" :state="error.email.state" trim></b-form-input>
+            <b-form-input ref="emailInput" v-model="form.email" v-bind:placeholder="$t('input_email')" :type="'email'" :state="error.email.state" trim v-focus></b-form-input>
         </b-form-group>
         <b-form-group :invalid-feedback="error.psw.message" :state="error.psw.state">
             <b-form-input v-model="form.psw" v-bind:placeholder="$t('input_psw')" :type="'password'" :state="error.psw.state" trim></b-form-input>
@@ -73,6 +73,9 @@
             }
         },
         methods: {
+            test() {
+                window.console.log('a+b');
+            },
             goBack() {
                 this.$router.go(-1);
             },
@@ -158,8 +161,8 @@
             }
         },
         mounted() {
-            let input = this.$refs.emailInput;
-            input.focus();
+            //let input = this.$refs.emailInput;
+            //input.focus();
         },
         beforeMount() {
             userLogic.init(this.$config.baseServerUrl);

@@ -3,8 +3,8 @@ function HttpData() {
     this.baseUrl = '';
     this.init = (baseUrl) => this.baseUrl = baseUrl + '/data';
     this.get = (url) => { return http.get(url); }
-    this.all = (className) => {
-        let url = this.baseUrl + '/all/' + className;
+    this.all = (className,sessionId) => {
+        let url = `${this.baseUrl}/all/${className}/${sessionId}`; 
         return http.get(url);
     };
     this.listWithParentId = (className, parentId) => {

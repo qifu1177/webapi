@@ -79,15 +79,15 @@
                     obj[k] = source[k];
                 return obj;
             },
-            loadSessionId() {
-                roomLogic.loadSessionId(this.session);
+            setSessionId() {
+                this.session.id = this.$store.state.SessionId;
             }
             
         },
         beforeMount() {
             roomLogic.init(this.$config.baseServerUrl);
             roomLogic.setErrorFunc(this.$createShowMessage('error', this));
-            this.loadSessionId();           
+            this.setSessionId();           
         }
        
     };

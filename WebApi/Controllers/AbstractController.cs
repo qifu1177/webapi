@@ -60,11 +60,11 @@ namespace WebApi.Controllers
         {
             return Ok("live");
         }
-        [HttpGet("sessionid")]
-        public IActionResult GetSessionId()
-        {
-            return Ok(Guid.NewGuid());
-        }
+        //[HttpGet("sessionid")]
+        //public IActionResult GetSessionId()
+        //{
+        //    return Ok(Guid.NewGuid());
+        //}
                
 
         [HttpPost("file"), DisableRequestSizeLimit]
@@ -184,10 +184,10 @@ namespace WebApi.Controllers
             return false;
         }
 
-        protected string GetFileDir()
+        protected string GetFileDir(string userId)
         {
             string currentDir = Directory.GetCurrentDirectory();
-            return Path.Combine(currentDir, "files");
+            return Path.Combine(currentDir, "files",userId);
         }
 
         protected string GetBaseUrl()

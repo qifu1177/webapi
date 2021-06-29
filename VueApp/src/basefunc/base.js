@@ -5,14 +5,25 @@ function CreateBaseFunctions(vueInstance) {
                 return true;
             return false;
         },
-        loginCheck: function () {
-            if (vueInstance.$store.state.SessionId && ((new Date()).getTime() - vueInstance.$store.state.LastUpdateTs.getTime()) <= vueInstance.$config.sessionDuration * 1000) {
-                return;
-            } else {
-                vueInstance.$store.state.SessionId = '';
-                vueInstance.$store.state.LastUpdateTs = new Date();
-                vueInstance.$router.push({ path: '/user/login', query: {} });
+        changeSessionStorageTs(ms) {
+            let loginInfo = window.sessionStorage.getItem(vueInstance.$const.LoginInfo);
+            if (loginInfo) {
+                let data = JSON.parse(loginInfo);
+                data.loginTs = ms;
+                window.sessionStorage.setItem(vueInstance.$const.LoginInfo, JSON.stringify(data));
             }
+        },
+        updateLastTs(ms) {
+            vueInstance.$store.commit("authenticate/LastUpdateTs", new Date(ms));
+            this.changeSessionStorageTs(ms);
+        },
+        loginCheck() {
+            vueInstance.$store.dispatch("authenticate/LoginCheck", {
+                duration: vueInstance.$config.session.duration,
+                toLogin: () => {
+                    vueInstance.$router.push({ path: '/user/login', query: {} });
+                }
+            });
         },
         emailValid: function (email, output) {
             let b = this.IsNullOrEmpty(email) === false;

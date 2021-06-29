@@ -52,17 +52,17 @@ namespace BLL.Services
             return true;
         }
 
-        public void GetUploadFileConfig(IConfiguration configuration,List<string> typeList, out long maxSize)
+        public void GetUploadFileConfig(IConfiguration configuration, List<string> typeList, out long maxSize)
         {
             maxSize = Convert.ToInt64(configuration["UploadFile:MaxSize"]);
-            for(int i=0; ; i++)
+            for (int i = 0; ; i++)
             {
                 string vs = configuration[$"UploadFile:Type:{i}"];
                 if (string.IsNullOrEmpty(vs))
                     break;
                 typeList.Add(vs);
 
-            }            
+            }
         }
 
     }

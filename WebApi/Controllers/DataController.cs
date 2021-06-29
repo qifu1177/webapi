@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BLL;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,15 +21,19 @@ namespace WebApi.Controllers
 
         }
         
-        [HttpGet("all/{classname}")]
-        public IActionResult LoadAll(string classname)
+        [HttpGet("all/{classname}/{sessionid}")]
+        public IActionResult LoadAll(string classname,string sessionid)
         {
             string jsonStr = "";
             try
             {
-                object filePath = GetFileDir();
-                object baseUrl = GetBaseUrl();
-                jsonStr = CallMethode("BLL", classname, "All", new object[] {filePath,baseUrl }).ToString();
+                string userId = UserLogic.Instance.GetUserId(sessionid);
+                if(!string.IsNullOrEmpty(userId))
+                {
+                    object filePath = GetFileDir(userId);
+                    object baseUrl = GetBaseUrl();
+                    jsonStr = CallMethode("BLL", classname, "All", new object[] { filePath, baseUrl }).ToString();
+                }                
             }
             catch (Exception ex)
             {

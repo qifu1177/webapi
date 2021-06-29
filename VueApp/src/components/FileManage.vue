@@ -116,6 +116,8 @@
 <script>
     import logic from '@/logics/Logic'
     import fileView from '@/components/FileView.vue';
+    import { createNamespacedHelpers } from 'vuex';
+    const { mapGetters } = createNamespacedHelpers('authenticate');
     export default {
         name: 'FileManage',
         components: {
@@ -126,6 +128,9 @@
             moreSelected: Boolean
         },
         computed: {
+            ...mapGetters({
+                SessionId: "SessionId"               
+            }),
             inputFileReadonly() {
                 return this.uploadbackdata.state == window.$UploadFileState.run;
             },
@@ -209,11 +214,12 @@
                         this.selectedFiles.push(this.fileList[i].name);
                 }
             },
-            loadFileSetting() {
-                logic.loadFileSetting(this.fileSetting);
+            setFileSetting() {
+                this.fileSetting.maxSize = this.$config.uploadFile.maxSize;
+                this.fileSetting.fileTypes = this.$config.uploadFile.type.join('|');
             },
-            loadSessionId() {
-                logic.loadSessionId(this.session);
+            setSessionId() {
+                this.session.id = this.SessionId;
             },
             loadFiles() {
                 this.fileList = [];
@@ -280,8 +286,8 @@
         beforeMount() {
             logic.init(this.$config.baseServerUrl);
             logic.setErrorFunc(this.$createShowMessage('error', this));
-            this.loadFileSetting();
-            this.loadSessionId();
+            this.setFileSetting();
+            this.setSessionId();
             this.loadFiles();
         },
     };

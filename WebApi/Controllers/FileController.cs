@@ -1,4 +1,5 @@
-﻿using BLL.Services;
+﻿using BLL;
+using BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -17,21 +18,25 @@ namespace WebApi.Controllers
         public FileController(IConfiguration configuration, ILogger<DataController> logger) : base(configuration, logger)
         {
         }
-        [HttpGet("setting")]
-        public IActionResult GetUploadFileSetting()
+        //[HttpGet("setting")]
+        //public IActionResult GetUploadFileSetting()
+        //{            
+        //    dynamic userSetting = ConfigService.Instance.GetUserSettings(_configuration);
+        //    List<string> typeList = userSetting.UploadFile.Type;
+        //    long maxSize= userSetting.UploadFile.MaxSize;
+        //    FileService.Instance.GetUploadFileConfig(_configuration, typeList, out maxSize);
+        //    string typestr = string.Join('|', typeList);
+        //    string json = string.Format("\"filetypes\":\"{0}\",\"maxsize\": {1}", typestr, maxSize);
+        //    return Ok('{'+json+'}');
+        //}
+        [HttpGet("files/{sessionid}")]
+        public IEnumerable<BLL.Models.FileResult> Files(string sessionid)
         {
-            List<string> typeList = new List<string>();
-            long maxSize;
-            FileService.Instance.GetUploadFileConfig(_configuration, typeList, out maxSize);
-            string typestr = string.Join('|', typeList);
-            string json = string.Format("\"filetypes\":\"{0}\",\"maxsize\": {1}", typestr, maxSize);
-            return Ok('{'+json+'}');
-        }
-        [HttpGet("files")]
-        public IEnumerable<BLL.Models.FileResult> Files()
-        {
-            List<BLL.Models.FileResult> list = new List<BLL.Models.FileResult>();           
-            var fileDir = GetFileDir();
+            List<BLL.Models.FileResult> list = new List<BLL.Models.FileResult>();
+            string userId = UserLogic.Instance.SetConnectString(_connectString).GetUserId(sessionid);
+            if (string.IsNullOrEmpty(userId))
+                return list;
+            var fileDir = GetFileDir(userId);
             DirectoryInfo directoryInfo = new DirectoryInfo(fileDir);
             if (directoryInfo.Exists)
             {
@@ -50,8 +55,6 @@ namespace WebApi.Controllers
                         Link = link,
                         IsImage = isImage
                     };
-
-
                     list.Add(fileResult);
                 }
             }
