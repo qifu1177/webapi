@@ -12,5 +12,6 @@ namespace BLL
             _connectStr = connectStr;
             return Instance;
         }
+        
     }
 }

@@ -25,6 +25,14 @@ namespace BLL
             return ConstentValue.JSZeroDt.AddMilliseconds(jsTime);
         }
     }
+    public static class CollectionExtensions
+    {
+        public static void Add<T>(this ICollection<T> collection, params T[] args)
+        {
+            foreach (T value in args)
+                collection.Add(value);
+        }
+    }
     public static class StringExtensions
     {
         public static string Reverse(this string str)

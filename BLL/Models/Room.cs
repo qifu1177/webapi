@@ -14,6 +14,11 @@ namespace BLL.Models
         private string _fileDir = "";
         private string _baseUrl = "";
         private string _imagePath = "";
+        private string _sessionId = "";
+        public Room (string sessionId)
+        {
+            _sessionId = sessionId;            
+        }
         public string FileDir { set { _fileDir = value; } }
         public string BaseUrl { set { _baseUrl = value; } }
         private List<Cupboard> _cupboards = new List<Cupboard>();
@@ -43,7 +48,7 @@ namespace BLL.Models
             set
             {
                 _imagePath = value;
-                FileService.Instance.GetFielInfo(_fileDir, _baseUrl, _imagePath, out _link, out _icon, out _isImage, out _fileType);
+                FileService.Instance.GetFielInfo(_sessionId,_fileDir, _baseUrl, _imagePath, out _link, out _icon, out _isImage, out _fileType);
 
             }
         }

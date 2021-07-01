@@ -23,11 +23,15 @@ namespace WebApi.Controllers
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {            
             _logger = logger;
+            List<string> list = new List<string>();
+            list.Add("test1", "test2", "test2", "test2");
+           
+            //RoomLogic.Instance.Print("test");
             //double d = 6723.244543434;
             //string s = string.Format(CultureInfo.GetCultureInfo("en-GB").NumberFormat,"{0:#.###}", d);
             //Console.WriteLine(s);
         }
-        
+
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

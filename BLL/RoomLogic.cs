@@ -21,14 +21,14 @@ namespace BLL
         {
             _connectStr = conStr;
         }
-        public string All(string path, string url)
-        {
+        public string All(string sessionId, string path, string url)
+        {           
             string str = "";
             List<Room> list = new List<Room>();
             using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
             {
                 list = context.Rooms.Include(r => r.Cupboards)
-                        .Select(room => new Room
+                        .Select(room => new Room(sessionId)
                         {
                             FileDir = path,
                             BaseUrl = url,
@@ -46,7 +46,6 @@ namespace BLL
             return str;
         }
 
-        
         public void DeleteWithId(int id)
         {
             using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
@@ -64,10 +63,11 @@ namespace BLL
             if (dic.ContainsKey("SessionId") && dic["SessionId"].Count > 0 && dic.ContainsKey("ImagePath") && dic["ImagePath"].Count > 0)
             {
                 sessionId = dic["SessionId"][0];
-                if (string.IsNullOrEmpty(sessionId))
+                string userId = UserLogic.Instance.GetUserId(sessionId);
+                if (string.IsNullOrEmpty(userId))
                     throw new ArgumentException("SesseionId is not found.", "sessionid");
                 room.ImagePath = dic["ImagePath"][0];
-
+                room.UserId = userId;
             }
             if (dic.ContainsKey("RoomId") && dic["RoomId"].Count > 0)
             {
@@ -76,8 +76,7 @@ namespace BLL
             if (dic.ContainsKey("Name") && dic["Name"].Count > 0)
             {
                 room.Name = dic["Name"][0];
-            }
-            
+            }           
 
             return room;
         }
@@ -102,5 +101,6 @@ namespace BLL
                 context.SaveChanges();
             }
         }
+
     }
 }

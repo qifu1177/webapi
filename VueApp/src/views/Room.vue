@@ -119,10 +119,7 @@
                 showList: true
             }
         },
-        computed: {
-            //...mapGetters({
-            //    SessionId: "SessionId"
-            //}),
+        computed: {           
         },
         watch: {
             outputData: {
@@ -164,9 +161,6 @@
             roomLogic.init(this.$config.baseServerUrl);
             roomLogic.setErrorFunc(this.$createShowMessage('error', this));
             this.loadRooms();
-        },
-        //beforeCreate() {
-        //    this.$base.loginCheck();
-        //}
+        }
     });
 </script>

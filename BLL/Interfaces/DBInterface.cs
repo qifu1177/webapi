@@ -5,10 +5,11 @@ using System.Text;
 
 namespace BLL.Interfaces
 {
-    interface DBInterface
+    public interface DBInterface
     {
         void Insert(Dictionary<string, StringValues> dic);
         void Update(Dictionary<string, StringValues> dic);
         void DeleteWithId(int id);
+                
     }
 }

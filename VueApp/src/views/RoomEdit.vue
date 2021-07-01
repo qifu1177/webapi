@@ -23,8 +23,8 @@
 <script>
     import roomLogic from '@/logics';
     import fileSelect from '@/components/FileSelect.vue';
-    
-    export default {
+    import { createBaseViewObj } from "@/basefunc";
+    export default createBaseViewObj({
         name: 'Room',
         components: {
             FileSelect: fileSelect
@@ -34,8 +34,7 @@
                 form: {
                 },                
                 show: true,          
-                selectedFile: {name:''},
-                session: { id: '' },
+                selectedFile: {name:''},               
                 uploadbackdata: { message: '', exception: '' },
                 outputData: { message: '', exception: '' }
             }
@@ -63,7 +62,7 @@
                 event.preventDefault();                
                 this.form.TS = new Date().getTime();
                 this.form.ImagePath = this.selectedFile.name;
-                roomLogic.saveRoom(this.session.id, this.form, this.outputData);
+                roomLogic.saveRoom(this.SessionId, this.form, this.outputData);
             },
             onReset(event) {
                 event.preventDefault();
@@ -78,17 +77,13 @@
                 for (let k in source)
                     obj[k] = source[k];
                 return obj;
-            },
-            setSessionId() {
-                this.session.id = this.$store.state.SessionId;
             }
             
         },
         beforeMount() {
             roomLogic.init(this.$config.baseServerUrl);
-            roomLogic.setErrorFunc(this.$createShowMessage('error', this));
-            this.setSessionId();           
+            roomLogic.setErrorFunc(this.$createShowMessage('error', this));                    
         }
        
-    };
+    });
 </script>

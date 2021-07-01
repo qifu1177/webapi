@@ -17,7 +17,7 @@ function Logic() {
         this.errorFunc = func;
     }    
     this.uploadFile = (sessionId, inputfile, backData) => {
-        let url = http.baseUrl + '/file';
+        let url = `${http.baseUrl }/file/upload`;
         http.uploadFile(url,sessionId, inputfile).then((message) => {
             backData.message = message;
             if (message == "OK")
@@ -40,7 +40,7 @@ function Logic() {
     //    }, this.errorFunc);
     //}
     this.loadFiles = (sessionid,fileList, selectedFiles) => {
-        let url = http.baseUrl + '/file/files/' + sessionid;
+        let url = `${http.baseUrl}/file/files/${sessionid}`;
         http.get(url).then((datas) => {
             for (let i = 0; i < datas.length; i++) {                         
                 datas[i]['selected'] = selectedFiles.includes(datas[i].name);
@@ -49,8 +49,8 @@ function Logic() {
             }
         }, this.errorFunc);
     };
-    this.deleteFile = (filename, backData) => {
-        let url = http.baseUrl + '/file/' + filename;
+    this.deleteFile = (sessionid,filename, backData) => {
+        let url = `${http.baseUrl} /file/${sessionid}/${filename}`;
         http.delete(url).then((message) => {
             backData.message = message;
         }, (response) => {

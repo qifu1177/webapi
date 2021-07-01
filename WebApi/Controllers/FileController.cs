@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Net.Http.Headers;
 
 namespace WebApi.Controllers
 {
@@ -33,10 +33,9 @@ namespace WebApi.Controllers
         public IEnumerable<BLL.Models.FileResult> Files(string sessionid)
         {
             List<BLL.Models.FileResult> list = new List<BLL.Models.FileResult>();
-            string userId = UserLogic.Instance.SetConnectString(_connectString).GetUserId(sessionid);
-            if (string.IsNullOrEmpty(userId))
+            var fileDir = GetFileDirWithSessionId(sessionid);
+            if (string.IsNullOrEmpty(fileDir))
                 return list;
-            var fileDir = GetFileDir(userId);
             DirectoryInfo directoryInfo = new DirectoryInfo(fileDir);
             if (directoryInfo.Exists)
             {
@@ -45,7 +44,7 @@ namespace WebApi.Controllers
                 {
                     string link, icon, fileType;
                     bool isImage;
-                    FileService.Instance.GetFielInfo(fileDir, url, fInfo.Name, out link, out icon, out isImage, out fileType);                    
+                    FileService.Instance.GetFielInfo(sessionid,fileDir, url, fInfo.Name, out link, out icon, out isImage, out fileType);                    
                     BLL.Models.FileResult fileResult = new BLL.Models.FileResult
                     {
                         Name = fInfo.Name,
@@ -61,13 +60,58 @@ namespace WebApi.Controllers
             return list;
         }
 
-        [HttpDelete("{fileName}")]
-        public IActionResult DeleteFile(string fileName)
+        [HttpPost("upload"), DisableRequestSizeLimit]
+        public IActionResult Upload()
         {
             try
+            {               
+                var file = Request.Form.Files[0];
+                string message;
+                bool b = FileService.Instance.ValidFile(file.FileName, file.Length, _configuration, out message);
+                if (!b)
+                {
+                    return StatusCode(500, message);
+                }
+               
+                var fileDir = GetFileDirWithSessionId(Request.Form["sessionid"]);
+                if (string.IsNullOrEmpty(fileDir))
+                    return BadRequest();
+
+                if (file.Length > 0)
+                {
+                    DirectoryInfo directoryInfo = new DirectoryInfo(fileDir);
+                    if (!directoryInfo.Exists)
+                    {
+                        directoryInfo.Create();
+                    }
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(fileDir, fileName);
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                    return Ok("OK");
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
             {
-                string currentDir = Directory.GetCurrentDirectory();
-                var fileDir = Path.Combine(currentDir, "files");
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
+
+        [HttpDelete("{sessionid}/{fileName}")]
+        public IActionResult DeleteFile(string sessionid,string fileName)
+        {
+            try
+            {                 
+                var fileDir = GetFileDirWithSessionId(sessionid);
+                if (string.IsNullOrEmpty(fileDir))
+                    return BadRequest();
                 string filePath = Path.Combine(fileDir, fileName);
                 System.IO.File.Delete(filePath);
             }

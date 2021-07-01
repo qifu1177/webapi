@@ -223,14 +223,14 @@
             },
             loadFiles() {
                 this.fileList = [];
-                logic.loadFiles(this.fileList, this.selectedFiles);
+                logic.loadFiles(this.SessionId,this.fileList, this.selectedFiles);
             },
             validFile(selectedFile) {
                 if (selectedFile && selectedFile.name &&
                     selectedFile.name != this.uploadbackdata.uploadFileName) {
                     let showErrorMessage = this.$createShowMessage('error', this);
                     var patt = eval('/(' + this.fileSetting.fileTypes+')$/g');
-                    var res = patt.test(selectedFile.name);
+                    var res = patt.test(selectedFile.name.toLowerCase());
                     if (!res) {
                         showErrorMessage('The type of the uploaded file is invalid.');
                         return false;

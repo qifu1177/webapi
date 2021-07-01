@@ -32,7 +32,7 @@ namespace WebApi.Controllers
                 {
                     object filePath = GetFileDir(userId);
                     object baseUrl = GetBaseUrl();
-                    jsonStr = CallMethode("BLL", classname, "All", new object[] { filePath, baseUrl }).ToString();
+                    jsonStr = CallMethode("BLL", classname, "All",new object[] { sessionid,filePath, baseUrl }).ToString();
                 }                
             }
             catch (Exception ex)

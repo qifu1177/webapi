@@ -1,4 +1,5 @@
-﻿using BLL.Services;
+﻿using BLL;
+using BLL.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -60,62 +61,16 @@ namespace WebApi.Controllers
         {
             return Ok("live");
         }
-        //[HttpGet("sessionid")]
-        //public IActionResult GetSessionId()
-        //{
-        //    return Ok(Guid.NewGuid());
-        //}
-               
+            
 
-        [HttpPost("file"), DisableRequestSizeLimit]
-        public IActionResult Upload()
+        [HttpGet("{sessionid}/{fileName}")]
+        public IActionResult GetFile(string sessionid,string fileName)
         {
             try
             {
-                string sessionId = Request.Form["sessionid"];
-                var file = Request.Form.Files[0];
-                string message;
-                bool b = FileService.Instance.ValidFile(file.FileName, file.Length, _configuration, out message);
-                if(!b)
-                {                   
-                    return StatusCode(500, message);
-                }
-                string currentDir = Directory.GetCurrentDirectory();
-                var fileDir = Path.Combine(currentDir, "files");
-                if (file.Length > 0)
-                {
-                    DirectoryInfo directoryInfo = new DirectoryInfo(fileDir);
-                    if (!directoryInfo.Exists)
-                    {
-                        directoryInfo.Create();
-                    }
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(fileDir, fileName);
-
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
-                    return Ok("OK");
-                }
-                else
-                {
+                var fileDir = GetFileDirWithSessionId(sessionid);
+                if (string.IsNullOrEmpty(fileDir))
                     return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
-        }
-
-        [HttpGet("{fileName}")]
-        public IActionResult GetFile(string fileName)
-        {
-            try
-            {
-                string currentDir = Directory.GetCurrentDirectory();
-                var fileDir = Path.Combine(currentDir, "files");
                 string filePath = Path.Combine(fileDir, fileName);
                 FileInfo fileInfo = new FileInfo(filePath);
                 if(fileInfo.Exists)
@@ -188,6 +143,15 @@ namespace WebApi.Controllers
         {
             string currentDir = Directory.GetCurrentDirectory();
             return Path.Combine(currentDir, "files",userId);
+        }
+
+        protected string GetFileDirWithSessionId(string sessionId)
+        {
+            string userId = UserLogic.Instance.SetConnectString(_connectString).GetUserId(sessionId);
+            if (string.IsNullOrEmpty(userId))
+                return string.Empty;
+            var fileDir = GetFileDir(userId);
+            return fileDir;
         }
 
         protected string GetBaseUrl()
