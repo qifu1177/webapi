@@ -10,10 +10,7 @@ namespace Dal.Models
         public AppUser()
         {
             AppSessions = new HashSet<AppSession>();
-            Cupboards = new HashSet<Cupboard>();
-            Grids = new HashSet<Grid>();
-            Rooms = new HashSet<Room>();
-            Things = new HashSet<Thing>();
+            AppUserHomes = new HashSet<AppUserHome>();
         }
 
         public string UserId { get; set; }
@@ -26,9 +23,6 @@ namespace Dal.Models
 
         public virtual AppRole Role { get; set; }
         public virtual ICollection<AppSession> AppSessions { get; set; }
-        public virtual ICollection<Cupboard> Cupboards { get; set; }
-        public virtual ICollection<Grid> Grids { get; set; }
-        public virtual ICollection<Room> Rooms { get; set; }
-        public virtual ICollection<Thing> Things { get; set; }
+        public virtual ICollection<AppUserHome> AppUserHomes { get; set; }
     }
 }

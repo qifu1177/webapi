@@ -27,10 +27,11 @@ namespace BLL
     }
     public static class CollectionExtensions
     {
-        public static void Add<T>(this ICollection<T> collection, params T[] args)
+        public static ICollection<T> Adds<T>(this ICollection<T> collection, params T[] args)
         {
             foreach (T value in args)
                 collection.Add(value);
+            return collection;
         }
     }
     public static class StringExtensions

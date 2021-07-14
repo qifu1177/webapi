@@ -26,7 +26,7 @@ namespace WebApi.Controllers
             try
             {
                 dynamic setting = ConfigService.Instance.GetUserSettings(_configuration);
-                string str=Newtonsoft.Json.JsonConvert.SerializeObject(setting, Formatting.None);
+                string str = Newtonsoft.Json.JsonConvert.SerializeObject(setting, Formatting.None);
                 return Ok(str);
             }
             catch (Exception ex)
@@ -41,15 +41,15 @@ namespace WebApi.Controllers
             try
             {
                 string psw = Request.Headers["psw"];
-                string str=UserLogic.Instance.SetConnectString(_connectString).Login(email, psw);
+                string str = UserLogic.Instance.SetConnectString(_connectString).Login(email, psw);
                 return Ok(str);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return StatusCode(500, $"Internal server error: {ex}");
             }
-            
+
         }
         [HttpPost("register")]
         public IActionResult Register()

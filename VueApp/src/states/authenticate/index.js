@@ -52,7 +52,7 @@ export default {
     actions: {
         LoginCheck: ({ commit, getters, state }, session) => {
             state.duration = session.duration;            
-            let b = state.SessionId && getters.StateTimeCheck;
+            let b = state.duration>0 && state.SessionId && getters.StateTimeCheck;
             if (b) {
                 return;
             } else {

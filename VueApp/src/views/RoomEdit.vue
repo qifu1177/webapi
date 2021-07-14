@@ -81,8 +81,7 @@
             
         },
         beforeMount() {
-            roomLogic.init(this.$config.baseServerUrl);
-            roomLogic.setErrorFunc(this.$createShowMessage('error', this));                    
+            roomLogic.init(this.$config.baseServerUrl).setErrorFunc(this.$createShowMessage('error', this)).setChangeUpdateTs(this.$base.updateLastTs);                 
         }
        
     });

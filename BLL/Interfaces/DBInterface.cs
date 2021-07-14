@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Primitives;
+﻿using BLL.Models;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,9 +8,10 @@ namespace BLL.Interfaces
 {
     public interface DBInterface
     {
-        void Insert(Dictionary<string, StringValues> dic);
-        void Update(Dictionary<string, StringValues> dic);
-        void DeleteWithId(int id);
+        
+        MessageObject Insert(Dictionary<string, StringValues> dic,DateTime updateTs);
+        MessageObject Update(Dictionary<string, StringValues> dic, DateTime updateTs);
+        MessageObject DeleteWithId(int id, DateTime updateTs);
                 
     }
 }

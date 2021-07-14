@@ -12,13 +12,13 @@
         <div v-if="showList">
             <b-table hover :items="rooms" :fields="fields" responsive="sm" show-empty>
                 <template v-slot:cell(Name)="data">
-                    <div variant="light">{{data.item.Name}}</div>
+                    <div variant="light">{{data.item.name}}</div>
                 </template>
                 <template v-slot:cell(ImagePath)="data">
-                    <FileView :is-list="true" :is-img="data.item.IsImage" :name="data.item.ImagePath" :icon="data.item.Icon" :link="data.item.Link"></FileView>
+                    <FileView :is-list="true" :is-img="data.item.isImage" :name="data.item.imagePath" :icon="data.item.icon" :link="data.item.link"></FileView>
                 </template>
                 <template v-slot:cell(TS)="data">
-                    <div variant="light" v-df="{'val':data.item.TS,'f':'long'}"></div>
+                    <div variant="light" v-df="{'val':data.item.ts,'f':'long'}"></div>
                 </template>
                 <template #cell(actions)="data">
                     <b-button-group>
@@ -33,7 +33,7 @@
                 <template #row-details="data">
                     <b-card>
                         <div>
-                            Are you sure you want to delete the data {{data.item.Name}}?
+                            Are you sure you want to delete the data {{data.item.name}}?
                         </div>
                         <b-button-group size="sm" class="mx-3">
                             <b-button size="sm" @click="deleteRoom(data.item)" variant="danger">OK</b-button>
@@ -48,11 +48,11 @@
                 <b-card v-for="(item,index) in rooms" :key="index">
                     <b-row>
                         <b-col align="center">
-                            <FileView :is-list="false" :is-img="item.IsImage" :name="item.ImagePath" :icon="item.Icon" :link="item.Link"></FileView>
+                            <FileView :is-list="false" :is-img="item.isImage" :name="item.imagePath" :icon="item.icon" :link="item.link"></FileView>
                         </b-col>
                     </b-row>
                     <b-row>
-                        <b-col align="center"><b>{{item.Name}}</b></b-col>
+                        <b-col align="center"><b>{{item.name}}</b></b-col>
                     </b-row>
                     <b-row>
                         <b-col align="center">
@@ -69,7 +69,7 @@
                     <b-row v-show="item.showDelete">
                         <b-col>
                             <div>
-                                Are you sure you want to delete the data {{item.Name}} ?
+                                Are you sure you want to delete the data {{item.name}} ?
                             </div>
                             <b-button-group size="sm" class="mx-3">
                                 <b-button size="sm" @click="deleteRoom(item)" variant="danger">OK</b-button>
@@ -101,15 +101,15 @@
                 rooms: [],
                 fields: [
                     {
-                        key: 'Name',
+                        key: 'name',
                         sortable: true
                     },
                     {
-                        key: 'ImagePath',
+                        key: 'imagePath',
                         sortable: false
                     },
                     {
-                        key: 'TS',
+                        key: 'ts',
                         label: 'Date',
                         sortable: true
                     },
@@ -119,7 +119,7 @@
                 showList: true
             }
         },
-        computed: {           
+        computed: {
         },
         watch: {
             outputData: {
@@ -158,8 +158,7 @@
             }
         },
         beforeMount() {
-            roomLogic.init(this.$config.baseServerUrl);
-            roomLogic.setErrorFunc(this.$createShowMessage('error', this));
+            roomLogic.init(this.$config.baseServerUrl).setErrorFunc(this.$createShowMessage('error', this)).setChangeUpdateTs(this.$base.updateLastTs);
             this.loadRooms();
         }
     });

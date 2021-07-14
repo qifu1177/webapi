@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         {            
             _logger = logger;
             List<string> list = new List<string>();
-            list.Add("test1", "test2", "test2", "test2");
+            list.Adds("test1", "test2", "test2", "test2");
            
             //RoomLogic.Instance.Print("test");
             //double d = 6723.244543434;

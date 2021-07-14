@@ -21,13 +21,13 @@ namespace BLL
         {
             _connectStr = conStr;
         }
-        public string All(string sessionId, string path, string url)
+        public MessageData<dynamic> All(string sessionId, string path, string url, DateTime updateTs)
         {           
-            string str = "";
-            List<Room> list = new List<Room>();
+            //string str = "";
+            MessageData<dynamic> messageData = new MessageData<dynamic>("OK",updateTs,new List<dynamic>());
             using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
             {
-                list = context.Rooms.Include(r => r.Cupboards)
+                messageData.Datas.AddRange( context.Rooms.Include(r => r.Cupboards)
                         .Select(room => new Room(sessionId)
                         {
                             FileDir = path,
@@ -40,34 +40,36 @@ namespace BLL
                             Dal_Cupboard = room.Cupboards
                         ,
                             TS = room.CreateTs.ToJsTime()
-                        }).ToList();
+                        }).ToList());               
             }
-            str = JsonConvert.SerializeObject(list, Formatting.None);
-            return str;
+            //str = JsonConvert.SerializeObject(list, Formatting.None);
+            return messageData;
         }
 
-        public void DeleteWithId(int id)
+        public MessageObject DeleteWithId(int id, DateTime updateTs)
         {
+            MessageObject messageData = new MessageObject("OK", updateTs);
             using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
             {
                 var room = context.Rooms.Single(r => r.RoomId == id);
                 context.Rooms.Remove(room);
                 context.SaveChanges();
             }
+            return messageData;
         }
 
-        public Dal.Models.Room CreateRoom(Dictionary<string, StringValues> dic)
-        {
+        public Dal.Models.Room CreateRoom(Dictionary<string, StringValues> dic, DateTime updateTs)
+        {            
             Dal.Models.Room room = new Dal.Models.Room();
             string sessionId = "";
             if (dic.ContainsKey("SessionId") && dic["SessionId"].Count > 0 && dic.ContainsKey("ImagePath") && dic["ImagePath"].Count > 0)
             {
                 sessionId = dic["SessionId"][0];
-                string userId = UserLogic.Instance.GetUserId(sessionId);
+                string userId = UserLogic.Instance.GetUserIdAndUpdateUpdateTs(sessionId,updateTs);
                 if (string.IsNullOrEmpty(userId))
                     throw new ArgumentException("SesseionId is not found.", "sessionid");
                 room.ImagePath = dic["ImagePath"][0];
-                room.UserId = userId;
+                //room.UserId = userId;
             }
             if (dic.ContainsKey("RoomId") && dic["RoomId"].Count > 0)
             {
@@ -80,26 +82,30 @@ namespace BLL
 
             return room;
         }
-        public void Insert(Dictionary<string, StringValues> dic)
+        public MessageObject Insert(Dictionary<string, StringValues> dic, DateTime updateTs)
         {
+            MessageObject messageData = new MessageObject("OK", updateTs);
             using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
             {
-                context.Rooms.Add(this.CreateRoom(dic));
+                context.Rooms.Add(this.CreateRoom(dic, updateTs));
                 context.SaveChanges();
             }
+            return messageData;
         }
 
-        public void Update(Dictionary<string, StringValues> dic)
+        public MessageObject Update(Dictionary<string, StringValues> dic, DateTime updateTs)
         {
+            MessageObject messageData = new MessageObject("OK",updateTs);
             using (Dal.Models.DataContext context = new Dal.Models.DataContext(_connectStr))
             {
-                Dal.Models.Room room = this.CreateRoom(dic);
+                Dal.Models.Room room = this.CreateRoom(dic, updateTs);
                 var old = context.Rooms.Single(r => r.RoomId == room.RoomId);
                 old.Name = room.Name;
                 old.ImagePath = room.ImagePath;
 
                 context.SaveChanges();
             }
+            return messageData;
         }
 
     }

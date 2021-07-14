@@ -32,8 +32,9 @@ namespace WebApi.Controllers
         [HttpGet("files/{sessionid}")]
         public IEnumerable<BLL.Models.FileResult> Files(string sessionid)
         {
+            DateTime updateTs = DateTime.UtcNow;
             List<BLL.Models.FileResult> list = new List<BLL.Models.FileResult>();
-            var fileDir = GetFileDirWithSessionId(sessionid);
+            var fileDir = GetFileDirWithSessionId(sessionid, updateTs);
             if (string.IsNullOrEmpty(fileDir))
                 return list;
             DirectoryInfo directoryInfo = new DirectoryInfo(fileDir);
@@ -63,6 +64,7 @@ namespace WebApi.Controllers
         [HttpPost("upload"), DisableRequestSizeLimit]
         public IActionResult Upload()
         {
+            DateTime updateTs = DateTime.UtcNow;
             try
             {               
                 var file = Request.Form.Files[0];
@@ -73,7 +75,7 @@ namespace WebApi.Controllers
                     return StatusCode(500, message);
                 }
                
-                var fileDir = GetFileDirWithSessionId(Request.Form["sessionid"]);
+                var fileDir = GetFileDirWithSessionId(Request.Form["sessionid"], updateTs);
                 if (string.IsNullOrEmpty(fileDir))
                     return BadRequest();
 
@@ -107,9 +109,10 @@ namespace WebApi.Controllers
         [HttpDelete("{sessionid}/{fileName}")]
         public IActionResult DeleteFile(string sessionid,string fileName)
         {
+            DateTime updateTs = DateTime.UtcNow;
             try
             {                 
-                var fileDir = GetFileDirWithSessionId(sessionid);
+                var fileDir = GetFileDirWithSessionId(sessionid,updateTs);
                 if (string.IsNullOrEmpty(fileDir))
                     return BadRequest();
                 string filePath = Path.Combine(fileDir, fileName);

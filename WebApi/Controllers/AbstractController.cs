@@ -1,4 +1,5 @@
 ﻿using BLL;
+using BLL.Models;
 using BLL.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,23 +26,23 @@ namespace WebApi.Controllers
             _logger = logger;
         }
 
-        protected object CallMethode(string assemblyName, string className, string methodeName, object[] paramenter)
+        protected MessageData<dynamic> CallMethode(string assemblyName, string className, string methodeName, object[] paramenter)
         {
             Assembly assembly = Assembly.Load(assemblyName);
             Type type = assembly.GetType(assemblyName + "." + className + "Logic");
             var instance = Activator.CreateInstance(type, new List<object> { _connectString }.ToArray());
             MethodInfo method = type.GetMethod(methodeName);
-            return method.Invoke(instance, paramenter);
+            return method.Invoke(instance, paramenter) as MessageData<dynamic>;
         }
-        protected void CallMethodeWithId(string assemblyName, string className, string methodeName, int id)
+        protected MessageObject CallMethodeWithId(string assemblyName, string className, string methodeName, int id,DateTime updateTs)
         {
             Assembly assembly = Assembly.Load(assemblyName);
             Type type = assembly.GetType(assemblyName + "." + className + "Logic");
             var instance = Activator.CreateInstance(type, new List<object> { _connectString }.ToArray());
             MethodInfo method = type.GetMethod(methodeName);
-            method.Invoke(instance, new object[] { id });
+            return method.Invoke(instance, new object[] { id, updateTs }) as MessageObject;
         }
-        protected void CallMethodeWithFormData(string assemblyName, string className, string methodeName, IFormCollection formData)
+        protected MessageObject CallMethodeWithFormData(string assemblyName, string className, string methodeName, IFormCollection formData,DateTime updateTs)
         {
             Assembly assembly = Assembly.Load(assemblyName);
             Type type = assembly.GetType(assemblyName + "." + className + "Logic");
@@ -54,7 +55,7 @@ namespace WebApi.Controllers
                 formData.TryGetValue(k, out sv);
                 dic.Add(k, sv);
             }
-            method.Invoke(instance, new object[] { dic });
+            return method.Invoke(instance, new object[] { dic, updateTs }) as MessageObject;
         }
         [HttpGet]
         public IActionResult Get()
@@ -66,9 +67,10 @@ namespace WebApi.Controllers
         [HttpGet("{sessionid}/{fileName}")]
         public IActionResult GetFile(string sessionid,string fileName)
         {
+            DateTime updateTs = DateTime.UtcNow;
             try
             {
-                var fileDir = GetFileDirWithSessionId(sessionid);
+                var fileDir = GetFileDirWithSessionId(sessionid, updateTs);
                 if (string.IsNullOrEmpty(fileDir))
                     return BadRequest();
                 string filePath = Path.Combine(fileDir, fileName);
@@ -145,9 +147,9 @@ namespace WebApi.Controllers
             return Path.Combine(currentDir, "files",userId);
         }
 
-        protected string GetFileDirWithSessionId(string sessionId)
+        protected string GetFileDirWithSessionId(string sessionId,DateTime updateTs)
         {
-            string userId = UserLogic.Instance.SetConnectString(_connectString).GetUserId(sessionId);
+            string userId = UserLogic.Instance.SetConnectString(_connectString).GetUserIdAndUpdateUpdateTs(sessionId, updateTs);
             if (string.IsNullOrEmpty(userId))
                 return string.Empty;
             var fileDir = GetFileDir(userId);

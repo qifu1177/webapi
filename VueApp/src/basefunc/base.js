@@ -15,11 +15,12 @@ function CreateBaseFunctions(vueInstance) {
         },
         updateLastTs(ms) {
             vueInstance.$store.commit("authenticate/LastUpdateTs", new Date(ms));
-            this.changeSessionStorageTs(ms);
+            vueInstance.$base.changeSessionStorageTs(ms);
         },
         loginCheck() {
+            let duration = vueInstance.$config ? vueInstance.$config.session.duration : 0;
             vueInstance.$store.dispatch("authenticate/LoginCheck", {
-                duration: vueInstance.$config.session.duration,
+                duration: duration,
                 toLogin: () => {
                     vueInstance.$router.push({ path: '/user/login', query: {} });
                 }

@@ -18,12 +18,10 @@ namespace Dal.Models
         public int Height { get; set; }
         public int RoomId { get; set; }
         public string ImagePath { get; set; }
-        public string UserId { get; set; }
         public DateTime CreateTs { get; set; }
         public DateTime UpdateTs { get; set; }
 
         public virtual Room Room { get; set; }
-        public virtual AppUser User { get; set; }
         public virtual ICollection<Grid> Grids { get; set; }
     }
 }

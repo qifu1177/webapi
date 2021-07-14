@@ -8,7 +8,7 @@ namespace Dal.Models
 {
     public partial class DataContext : DbContext
     {
-        private string _connectString = "Server=THREE\\SQLEXPRESS;Database=ApartmentDB;User Id=sa;Password=sa;";
+        private string _connectString = "Server=THREE\\SQLEXPRESS;Database=HomeDB;User Id=sa;Password=sa;";
         public DataContext() : this("")
         {
         }
@@ -26,9 +26,12 @@ namespace Dal.Models
         public virtual DbSet<AppRole> AppRoles { get; set; }
         public virtual DbSet<AppSession> AppSessions { get; set; }
         public virtual DbSet<AppUser> AppUsers { get; set; }
+        public virtual DbSet<AppUserHome> AppUserHomes { get; set; }
         public virtual DbSet<Cupboard> Cupboards { get; set; }
         public virtual DbSet<Grid> Grids { get; set; }
         public virtual DbSet<GridThring> GridThrings { get; set; }
+        public virtual DbSet<Home> Homes { get; set; }
+        public virtual DbSet<HomeImage> HomeImages { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<RoleRight> RoleRights { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
@@ -120,6 +123,28 @@ namespace Dal.Models
                     .HasConstraintName("FK_AppUser_AppRole");
             });
 
+            modelBuilder.Entity<AppUserHome>(entity =>
+            {
+                entity.Property(e => e.HomeId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Home)
+                    .WithMany(p => p.AppUserHomes)
+                    .HasForeignKey(d => d.HomeId)
+                    .HasConstraintName("FK_AppUserHomes_Homes");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AppUserHomes)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AppUserHomes_AppUsers");
+            });
+
             modelBuilder.Entity<Cupboard>(entity =>
             {
                 entity.Property(e => e.CreateTs)
@@ -130,19 +155,10 @@ namespace Dal.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getutcdate())");
 
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.HasOne(d => d.Room)
                     .WithMany(p => p.Cupboards)
                     .HasForeignKey(d => d.RoomId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Cupboards)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Cupboards_AppUser");
+                    .HasConstraintName("FK_Cupboards_Room");
             });
 
             modelBuilder.Entity<Grid>(entity =>
@@ -155,19 +171,10 @@ namespace Dal.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getutcdate())");
 
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.HasOne(d => d.Cupboard)
                     .WithMany(p => p.Grids)
                     .HasForeignKey(d => d.CupboardId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Grids)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Grids_AppUser");
+                    .HasConstraintName("FK_Grids_Cupboards");
             });
 
             modelBuilder.Entity<GridThring>(entity =>
@@ -184,6 +191,40 @@ namespace Dal.Models
                     .WithMany()
                     .HasForeignKey(d => d.ThingId)
                     .HasConstraintName("FK_GridThrings_Things");
+            });
+
+            modelBuilder.Entity<Home>(entity =>
+            {
+                entity.Property(e => e.HomeId).HasMaxLength(50);
+
+                entity.Property(e => e.Address).HasMaxLength(100);
+
+                entity.Property(e => e.CreateTs)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getutcdate())");
+
+                entity.Property(e => e.Location).HasMaxLength(100);
+
+                entity.Property(e => e.UpdateTs)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getutcdate())");
+
+                entity.Property(e => e.Zip)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .HasColumnName("ZIP");
+            });
+
+            modelBuilder.Entity<HomeImage>(entity =>
+            {
+                entity.Property(e => e.HomeId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Home)
+                    .WithMany(p => p.HomeImages)
+                    .HasForeignKey(d => d.HomeId)
+                    .HasConstraintName("FK_HomeImages_Home");
             });
 
             modelBuilder.Entity<Module>(entity =>
@@ -225,18 +266,18 @@ namespace Dal.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getutcdate())");
 
+                entity.Property(e => e.HomeId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.UpdateTs)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getutcdate())");
 
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.User)
+                entity.HasOne(d => d.Home)
                     .WithMany(p => p.Rooms)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Rooms_AppUser");
+                    .HasForeignKey(d => d.HomeId)
+                    .HasConstraintName("FK_Rooms_Home");
             });
 
             modelBuilder.Entity<Thing>(entity =>
@@ -245,18 +286,18 @@ namespace Dal.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getutcdate())");
 
+                entity.Property(e => e.HomeId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.UpdateTs)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getutcdate())");
 
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.User)
+                entity.HasOne(d => d.Home)
                     .WithMany(p => p.Things)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Things_AppUser");
+                    .HasForeignKey(d => d.HomeId)
+                    .HasConstraintName("FK_Things_Home");
             });
 
             OnModelCreatingPartial(modelBuilder);

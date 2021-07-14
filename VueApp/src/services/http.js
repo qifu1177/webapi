@@ -14,30 +14,7 @@ function Http() {
             });
         });
     };
-    //this.asyncGet = async (url, header) => {
-    //    return new Promise((resolve, reject) => {
-    //        let axiosGet = async function () {
-    //            try {
-    //                let res = await axios({
-    //                    url: url,
-    //                    method: 'get',
-    //                    timeout: 600000,
-    //                    headers: header
-    //                });
-    //                if (res.status == 200) {
-    //                    resolve(res.data);
-    //                } else {
-    //                    reject(res.data);
-    //                }
-    //            }
-    //            catch (err) {
-    //                reject(err);
-    //            }
-    //        };
-    //        axiosGet();
-    //    });
-
-    //};
+   
     this.delete = (url) => {
         return new Promise((callBack, errorBack) => {
             axios.delete(url).then(function (response) {

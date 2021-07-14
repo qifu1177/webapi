@@ -137,8 +137,9 @@ namespace BLL
             }
             return backStr;
         }
-        public string GetUserId(string sessionid)
+        public string GetUserIdAndUpdateUpdateTs(string sessionid,DateTime updateTs)
         {
+           
             string userId = string.Empty;
             if (string.IsNullOrEmpty(sessionid))
                 return userId;
@@ -148,9 +149,12 @@ namespace BLL
                 if(sessions.Length==1)
                 {
                     if (sessionid == sessions[0].SessionId)
-                        userId = sessions[0].UserId;
+                    {
+                        userId = sessions[0].UserId;                       
+                        sessions[0].UpdateTs = updateTs;
+                        context.SaveChanges();
+                    }
                 }               
-   
             }
             return userId;
         }

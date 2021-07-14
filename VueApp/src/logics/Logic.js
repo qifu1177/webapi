@@ -13,9 +13,18 @@ function Logic() {
     this.errorFunc = function (response) {
         window.console.log(response);
     };
+    this.changeUpdateTs = function (dt) {
+        window.console.log(dt);
+    };
+
     this.setErrorFunc = function (func) {
         this.errorFunc = func;
-    }    
+        return this;
+    }; 
+    this.setChangeUpdateTs = function (func) {
+        this.changeUpdateTs = func;
+        return this;
+    };  
     this.uploadFile = (sessionId, inputfile, backData) => {
         let url = `${http.baseUrl }/file/upload`;
         http.uploadFile(url,sessionId, inputfile).then((message) => {
@@ -32,13 +41,7 @@ function Logic() {
                 that.errorFunc(backData);
             });
     };
-    //this.loadFileSetting = (setting) => {
-    //    let url = http.baseUrl + '/file/setting';
-    //    http.get(url).then((obj) => {            
-    //        setting["fileTypes"] = obj.filetypes;
-    //        setting["maxSize"] = obj.maxsize;
-    //    }, this.errorFunc);
-    //}
+    
     this.loadFiles = (sessionid,fileList, selectedFiles) => {
         let url = `${http.baseUrl}/file/files/${sessionid}`;
         http.get(url).then((datas) => {
