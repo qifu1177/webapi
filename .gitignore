@@ -2,4 +2,5 @@
 *.dll
 */dist/*
 */files/*
+MongoDB/data/*
 

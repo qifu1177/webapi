@@ -1,8 +1,10 @@
 ﻿using BLL;
 using BLL.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +23,37 @@ namespace WebApi.Controllers
         {
 
         }
-
+        protected MessageData<dynamic> CallMethode(string assemblyName, string className, string methodeName, object[] paramenter)
+        {
+            Assembly assembly = Assembly.Load(assemblyName);
+            Type type = assembly.GetType(assemblyName + "." + className + "Logic");
+            var instance = Activator.CreateInstance(type, new List<object> { _connectString }.ToArray());
+            MethodInfo method = type.GetMethod(methodeName);
+            return method.Invoke(instance, paramenter) as MessageData<dynamic>;
+        }
+        protected MessageObject CallMethodeWithId(string assemblyName, string className, string methodeName, int id, DateTime updateTs)
+        {
+            Assembly assembly = Assembly.Load(assemblyName);
+            Type type = assembly.GetType(assemblyName + "." + className + "Logic");
+            var instance = Activator.CreateInstance(type, new List<object> { _connectString }.ToArray());
+            MethodInfo method = type.GetMethod(methodeName);
+            return method.Invoke(instance, new object[] { id, updateTs }) as MessageObject;
+        }
+        protected MessageObject CallMethodeWithFormData(string assemblyName, string className, string methodeName, IFormCollection formData, DateTime updateTs)
+        {
+            Assembly assembly = Assembly.Load(assemblyName);
+            Type type = assembly.GetType(assemblyName + "." + className + "Logic");
+            var instance = Activator.CreateInstance(type, new List<object> { _connectString }.ToArray());
+            MethodInfo method = type.GetMethod(methodeName);
+            Dictionary<string, StringValues> dic = new Dictionary<string, StringValues>();
+            foreach (string k in formData.Keys)
+            {
+                StringValues sv = new StringValues();
+                formData.TryGetValue(k, out sv);
+                dic.Add(k, sv);
+            }
+            return method.Invoke(instance, new object[] { dic, updateTs }) as MessageObject;
+        }
         [HttpGet("all/{classname}/{sessionid}")]
         public IActionResult LoadAll(string classname, string sessionid)
         {

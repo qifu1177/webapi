@@ -2,7 +2,7 @@
   "profiles": {
     "DbInit": {
       "commandName": "Project",
-      "commandLineArgs": "constr=\"Server=THREE\\SQLEXPRESS;Database=ApartmentDB;User Id=sa;Password=sa;\" Email=qifu1177@gmail.com psw=qWe123// un=qifu"
+      "commandLineArgs": "constr=mongodb://localhost:27017 DBName=HouseThingDb  Email=qifu1177@gmail.com psw=qWe123// un=qifu"
     }
   }
 }

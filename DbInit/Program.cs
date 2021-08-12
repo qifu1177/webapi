@@ -7,27 +7,27 @@ namespace DbInit
     {
         public static void Main(string[] args)
         {
+          
             dynamic parameter = InitParamenter(args);
             if(string.IsNullOrEmpty(parameter.connecStr))
             {
                 Console.WriteLine("Connectingstring is empty.");
                 return;
-            }
+            }           
             
-            if (parameter.initRole)
-                BLL.DbInit.Instance.SetConnectString(parameter.connecStr).InitRole();
             if (parameter.initModules)
-                BLL.DbInit.Instance.SetConnectString(parameter.connecStr).InitModules();
-            if (parameter.initRole && parameter.initModules)
-                BLL.DbInit.Instance.SetConnectString(parameter.connecStr).InitAdminModulesRight();
+                Domain.DbInit.Instance.Init(parameter.connecStr, parameter.dbName).InitModules();
+            if (parameter.initRole)
+                Domain.DbInit.Instance.Init(parameter.connecStr, parameter.dbName).InitRole();
             if (parameter.addAdmin)
-                BLL.DbInit.Instance.SetConnectString(parameter.connecStr).InitAdminUser(parameter.user);
+                Domain.DbInit.Instance.Init(parameter.connecStr, parameter.dbName).InitAdminUser(parameter.user);
 
         }
 
         private static dynamic InitParamenter(string[] args)
         {
             string connecStr = "";
+            string dbName = "";
             bool initRole = true;
             bool initModules = true;
             bool addAdmin = false;
@@ -40,17 +40,21 @@ namespace DbInit
                 {
                     connecStr = s.Substring(s.IndexOf('=') + 1);
                 }
-                if (s.StartsWith("InitRole") )
+                if (s.StartsWith("DBName") )
                 {
-                    string[] strs = s.Split('=');
-                    if (strs.Length > 1)
-                        initRole = Convert.ToBoolean(strs[1]);
+                    dbName = s.Substring(s.IndexOf('=') + 1);
                 }
                 if (s.StartsWith("InitModules"))
                 {
                     string[] strs = s.Split('=');
                     if (strs.Length > 1)
                         initModules = Convert.ToBoolean(strs[1]);
+                }
+                if (s.StartsWith("InitRole"))
+                {
+                    string[] strs = s.Split('=');
+                    if (strs.Length > 1)
+                        initRole = Convert.ToBoolean(strs[1]);
                 }
                 if (s.StartsWith("Email"))
                 {
@@ -84,6 +88,7 @@ namespace DbInit
             return new
             {
                 connecStr = connecStr,
+                dbName = dbName,
                 initRole = initRole,
                 initModules=initModules,
                 addAdmin = addAdmin,
