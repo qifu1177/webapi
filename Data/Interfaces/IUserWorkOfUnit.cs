@@ -15,5 +15,7 @@ namespace Data.Interfaces
         Dictionary<string, string> LoadModuleRights(string roleId);
         string LoadRoleId(string role);
         void InserUser(string userName, string password, string email, string roleId);
+        bool EmailIsExist(string email);
+        bool UserNameIsExist(string userName);
     }
 }

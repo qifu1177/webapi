@@ -6,23 +6,26 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["Dal/Dal.csproj", "Dal/"]
-RUN dotnet restore "Dal/Dal.csproj"
+COPY ["Help/Help.csproj", "Help/"]
+RUN dotnet restore "Help/Help.csproj"
 COPY . .
-COPY ["BLL/BLL.csproj", "BLL/"]
-RUN dotnet restore "BLL/BLL.csproj"
+COPY ["Data/Data.csproj", "Data/"]
+RUN dotnet restore "Data/Data.csproj"
 COPY . .
-COPY ["WebApi/WebApi.csproj", "WebApi/"]
-RUN dotnet restore "WebApi/WebApi.csproj"
+COPY ["Domain/Domain.csproj", "Domain/"]
+RUN dotnet restore "Domain/Domain.csproj"
 COPY . .
-WORKDIR "/src/WebApi"
-RUN dotnet build "WebApi.csproj" -c Release -o /app/build
+COPY ["Web/Web.csproj", "Web/"]
+RUN dotnet restore "Web/Web.csproj"
+COPY . .
+WORKDIR "/src/Web"
+RUN dotnet build "Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "WebApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "Web.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-ENTRYPOINT ["dotnet", "WebApi.dll"]
+ENTRYPOINT ["dotnet", "Web.dll"]

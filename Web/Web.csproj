@@ -7,8 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Resources\translation.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\translation.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Help\Help.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="files\" />
+    <Folder Include="logs\" />
   </ItemGroup>
 
 </Project>

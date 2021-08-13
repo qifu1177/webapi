@@ -120,8 +120,9 @@ namespace Domain
                     DateTime currentTs = DateTime.UtcNow;
                     string email = user.Email;
                     IEnumerable<AppRole> roles = roleRepository.Init(db).Load(item => item.Name == EnumData.Role.Admin.ToString());
+                    IEnumerable<AppUser> users = repository.Init(db).Load((item) => item.Email == email);
                     //repository.Init(db).Delete(item => item.Email == email);
-                    if (repository.Init(db).Load((item) => item.Email == email).Count() == 0 && roles.Count()>0)
+                    if (users.Count() == 0 && roles.Count()>0)
                     {
                         AppUser adminUser = new AppUser { Name = user.Name, Email = user.Email,RoleId=roles.First().Id, Password = MD5HashService.Instance.CreateMD5Hash(user.Password), CreateTs = currentTs, UpdateTs = currentTs };
                         repository.Init(db).Insert(adminUser);

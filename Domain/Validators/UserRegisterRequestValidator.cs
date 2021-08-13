@@ -18,7 +18,7 @@ namespace Domain.Validators
         public override IValidatorWithTranslator<UserRegisterRequest> Init(string language)
         {
             RuleFor(item => item.Email).NotNull().WithMessage(GetMessage(language, "notNull", "email"));
-            RuleFor(item => item.Email).Matches(Constents.ConstentMessages.EmailFormExpression).WithMessage(GetMessage(language, "email_form"));
+            RuleFor(item => item.Email).Matches(Help.Constents.RegexStrings.EmailFormExpression).WithMessage(GetMessage(language, "email_form"));
             return this;
         }
         private string GetMessage(string language, string messageKey, string paramMessagekey = null)

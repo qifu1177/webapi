@@ -21,7 +21,7 @@ namespace Data.DataAccess
         }
         public AppUser LoadUserWithEmail(string email, string password)
         {
-            IEnumerable<AppUser> list = _repository.Load(item => item.Email == email && item.Password == password);
+            IEnumerable<AppUser> list = _repository.Load(item => item.Email.ToLower() == email.ToLower() && item.Password == password);
             if (list.Count() > 0)
                 return list.First();
             return null;
@@ -62,6 +62,16 @@ namespace Data.DataAccess
                 Email = email,
                 RoleId = roleId
             });
+        }
+
+        public bool EmailIsExist(string email)
+        {
+            return _repository.Load(item => item.Email.ToLower() == email.ToLower()).Count() > 0;
+        }
+
+        public bool UserNameIsExist(string userName)
+        {
+            return _repository.Load(item => item.Name == userName).Count() > 0;
         }
     }
 }

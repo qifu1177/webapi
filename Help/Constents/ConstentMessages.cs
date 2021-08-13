@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Constents
+namespace Help.Constents
 {
     public class ConstentMessages
     {
@@ -13,8 +13,9 @@ namespace Domain.Constents
         public const string LoadRoleError = "LoadRoleError";
         public const string CreateSessionForUserError = "CreateSessionForUserError";
         public const string SaveUserError = "SaveUserError";
-        //Regex strings
-        public const string EmailFormExpression = @".+@{1}\w+\.{1}\w{2,}";
-        public const string AdressFormExpression = @".+\d+\s*\,*\s*\d{5}.*";
+        public const string ServerHandleError = "ServerHandleError";
+        public const string EmailIsExist = "EmailIsExist";
+        public const string UserNameIsExist = "UserNameIsExist";
+                
     }
 }

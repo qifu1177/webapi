@@ -1,3 +1,5 @@
+using Autofac;
+using Help.Constents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -22,6 +24,10 @@ namespace Web
         }
 
         public IConfiguration Configuration { get; }
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new Module(Configuration[ConstentConfigKey.MongoDB_ConnectionStr],Configuration[ConstentConfigKey.MongoDB_DBName]));
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -49,7 +55,9 @@ namespace Web
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseCors(
+                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
