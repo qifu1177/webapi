@@ -8,7 +8,7 @@ services:
     website:
         image: nginx
         volumes:
-            - ./VueApp/dist:/etc/nginx/templates
+            - ./AngularApp/dist:/etc/nginx/templates
         ports:
             - 5000:80
         environment:
