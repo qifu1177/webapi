@@ -17,19 +17,19 @@ namespace Web.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UsersController : AbstractController<UsersController>
+    public class UsersController : AbstractController<UsersController,UserRequest,UserResponse>
     {
-        private IUserLogic _logic;
-        public UsersController(IConfiguration configuration, ILogger<UsersController> logger, ITranslator translator, IUserLogic logic):base(configuration,logger, translator)
+        private IUserLogic<UserRequest,UserResponse> _userLogic;
+        public UsersController(IConfiguration configuration, ILogger<UsersController> logger, ITranslator translator, IUserLogic<UserRequest,UserResponse> logic):base(configuration,logger, translator,logic)
         {
-            _logic = logic;
+            _userLogic = logic;
         }
         [HttpPost("login/{language}")]
         public IActionResult Login(string language,UserLoginRequest request)
         {
             return this.RequestHandler(language, () =>
             {
-                UserLoginResponse response = _logic.Login(language, request);
+                UserLoginResponse response = _userLogic.Login(language, request);
                 return Ok(response);
             });           
 
@@ -39,41 +39,11 @@ namespace Web.Controllers
         {
             return this.RequestHandler(language, () =>
             {
-                MessageResponse response=_logic.Register(language,request); ;
+                MessageResponse response= _userLogic.Register(language,request); ;
                 return Ok(response);
             });
 
         }
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<UsersController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }

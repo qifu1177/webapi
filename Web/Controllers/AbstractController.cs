@@ -1,4 +1,5 @@
-﻿using Domain.Models.Responses;
+﻿using Domain.Interfaces;
+using Domain.Models.Responses;
 using Help.Constents;
 using Help.Exceptions;
 using Help.Interfaces;
@@ -13,16 +14,18 @@ using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
-    public abstract class AbstractController<C> : ControllerBase where C: ControllerBase
+    public abstract class AbstractController<C,Request,Response> : ControllerBase where C: ControllerBase where Request:IRequest where Response:IResponse
     {
         protected readonly ILogger<C> _logger;
         protected readonly IConfiguration _configuration;
+        protected ILogic<Request, Response> _logic;
         ITranslator _translator;
-        public AbstractController(IConfiguration configuration,ILogger<C> logger, ITranslator translator)
+        public AbstractController(IConfiguration configuration,ILogger<C> logger, ITranslator translator, ILogic<Request, Response> logic)
         {
             _configuration = configuration;
             _logger = logger;
             _translator = translator;
+            _logic = logic;
         }
         protected IActionResult RequestHandler(string language,Func<IActionResult> func)
         {
@@ -52,6 +55,63 @@ namespace Web.Controllers
                 return BadRequest(errorResponse);
             }
             
+        }
+
+        [HttpGet("all/{language}")]
+        public virtual IActionResult GetAll(string language)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                IEnumerable<Response> response = _logic.LoadAll(language);
+                return Ok(response);
+            });
+        }
+        [HttpGet("list/{parentid}/{language}")]
+        public virtual IActionResult GetListWithParentId(string language,string parentId)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                IEnumerable<Response> response = _logic.Load(language,parentId);
+                return Ok(response);
+            });
+        }
+        [HttpGet("{Id}/{language}")]
+        public virtual IActionResult Get(string language,string id)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                Response response = _logic.LoadWithId(language,id);
+                return Ok(response);
+            });
+        }
+        [HttpPost("{language}")]
+        public virtual IActionResult Post(string language,Request request)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                IdResponse response = _logic.Insert(language, request); 
+                return Ok(response);
+            });
+        }
+
+        [HttpPut("{language}")]
+        public virtual IActionResult Put(string language, Request request)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                MessageResponse response = _logic.Update(language, request);
+                return Ok(response);
+            });
+        }
+
+        [HttpDelete("{language}")]
+        public virtual IActionResult Delete(string language, string id)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                MessageResponse response = _logic.DeleteWithId(language, id);
+                return Ok(response);
+            });
         }
     }
 }

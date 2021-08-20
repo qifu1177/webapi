@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Logics
 {
-    public class UserLogic : AbstractLogic, IUserLogic
+    public class UserLogic : AbstractLogic, IUserLogic<UserRequest,UserResponse>
     {
         private IUserWorkOfUnit _work;
         private IValidatorWithTranslator<UserRegisterRequest> _validator;
@@ -28,6 +28,32 @@ namespace Domain.Logics
             _work = work;
             _validator = validator;
         }
+
+        public MessageResponse DeleteWithId(string language, object id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IdResponse Insert(string language, UserRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<UserResponse> Load(string language, object parentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<UserResponse> LoadAll(string language)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserResponse LoadWithId(string language, object id)
+        {
+            throw new NotImplementedException();
+        }
+
         public UserLoginResponse Login(string language, UserLoginRequest request)
         {
             string errorMessageKey = "";
@@ -81,6 +107,11 @@ namespace Domain.Logics
             else
                 throw new MessagesException(validationResponse.Messages);
 
+        }
+
+        public MessageResponse Update(string language, UserRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }
