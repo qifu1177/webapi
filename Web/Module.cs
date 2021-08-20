@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Help.Constents;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +13,17 @@ namespace Web
     {
         private string _dbConnetctionString;
         private string _dbName;
-        public Module(string dbConnetctionString,string dbName)
+        private IConfiguration _configuration;
+        public Module(IConfiguration configuration)
         {
-            _dbConnetctionString = dbConnetctionString;
-            _dbName = dbName;
+            _configuration = configuration;
+            _dbConnetctionString = _configuration[ConstentConfigKey.MongoDB_ConnectionStr]; 
+            _dbName = _configuration[ConstentConfigKey.MongoDB_DBName];
         }
         protected override void Load(ContainerBuilder builder)
         {
             string nameSpace = this.GetType().Namespace;
-            builder.RegisterModule(new Help.Module(Assembly.GetExecutingAssembly(), $"{nameSpace}.Resources.translation.json"));
+            builder.RegisterModule(new Help.Module(Assembly.GetExecutingAssembly(), $"{nameSpace}.Resources.translation.json",_configuration));
             builder.RegisterModule(new Domain.Module(_dbConnetctionString,_dbName));
         }
     }

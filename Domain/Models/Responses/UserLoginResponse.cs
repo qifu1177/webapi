@@ -1,4 +1,5 @@
 ﻿using Domain.Interfaces;
+using Help.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Domain.Models.Responses
         public string SessionId { get; set; }
         public double UpdateTs { get; set; }
         public Dictionary<string, string> ModuleRights { get; set; }
+        public IAppSetting AppSetting { get; set; }
     }
 }

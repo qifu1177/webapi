@@ -11,6 +11,7 @@ namespace Data.Interfaces
     {
         AppUser LoadUserWithUn(string userName, string password);
         AppUser LoadUserWithEmail(string email, string password);
+        AppUser LoadUserWithSessionId(string sessionId);
         void UpdateAppUser(AppUser user);
         Dictionary<string, string> LoadModuleRights(string roleId);
         string LoadRoleId(string role);

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Help.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,11 @@ namespace Help.Services
 {
     public class FileService : Singleton<FileService>
     {
+        private IAppSetting _appSetting;
+        public FileService(IAppSetting appSetting)
+        {
+            _appSetting = appSetting;
+        }
         public void GetFielInfo(string sessionId, string path, string url, string fileName, out string link, out string icon, out bool isImage, out string fileType)
         {
             string extension = Path.GetExtension(Path.Combine(path, fileName)).ToLower();
@@ -31,10 +37,6 @@ namespace Help.Services
         public bool ValidFile(string fileName, long fileSize, IConfiguration configuration, out string message)
         {
             message = string.Empty;
-            List<string> typeList = new List<string>();
-            long maxSize;
-            dynamic setting = ConfigService.Instance.GetUserSettings(configuration);
-            //GetUploadFileConfig(configuration, typeList, out maxSize);
             int startIndex = fileName.LastIndexOf('.') + 1;
             if (startIndex < 0 || startIndex > fileName.Length)
             {
@@ -42,12 +44,12 @@ namespace Help.Services
                 return false;
             }
             string extension = fileName.Substring(startIndex).ToLower();
-            if (!setting.uploadFile.type.Contains(extension.ToLower()))
+            if (!_appSetting.UploadFileTypes.Contains(extension.ToLower()))
             {
                 message = "The type of the uploaded file is invalid.";
                 return false;
             }
-            if (fileSize > setting.uploadFile.maxSize * 1024 * 1024)
+            if (fileSize > _appSetting.UploadFileMaxSize * 1024 * 1024)
             {
                 message = "The uploaded file is too large.";
                 return false;

@@ -26,7 +26,7 @@ namespace Web
         public IConfiguration Configuration { get; }
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new Module(Configuration[ConstentConfigKey.MongoDB_ConnectionStr],Configuration[ConstentConfigKey.MongoDB_DBName]));
+            builder.RegisterModule(new Module(Configuration));
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

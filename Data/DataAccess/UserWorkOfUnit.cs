@@ -73,5 +73,13 @@ namespace Data.DataAccess
         {
             return _repository.Load(item => item.Name == userName).Count() > 0;
         }
+
+        public AppUser LoadUserWithSessionId(string sessionId)
+        {
+            IEnumerable<AppUser> list = _repository.Load(item => item.Session.Id == sessionId);
+            if (list.Count() > 0)
+                return list.First();
+            return null;
+        }
     }
 }

@@ -9,11 +9,11 @@ namespace Domain.Interfaces
 {
     public interface ILogic<Request,Response>where Request:IRequest where Response: IResponse
     {
-        MessageResponse Update(string language, Request request);
-        IdResponse Insert(string language, Request request);
-        IEnumerable<Response> LoadAll(string language);
-        IEnumerable<Response> Load(string language, object parentId);
-        Response LoadWithId(string language, object id);
-        MessageResponse DeleteWithId(string language, object id);
+        MessageResponse Update(string language, string sessionId, Request request);
+        IdResponse Insert(string language, string sessionId, Request request);
+        IEnumerable<Response> LoadAll(string language, string sessionId);
+        IEnumerable<Response> Load(string language, string sessionId, object parentId);
+        Response LoadWithId(string language, string sessionId, object id);
+        MessageResponse DeleteWithId(string language, string sessionId, object id);
     }
 }

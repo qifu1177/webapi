@@ -23,37 +23,41 @@ namespace Domain.Logics
         private IUserWorkOfUnit _work;
         private IValidatorWithTranslator<UserRegisterRequest> _validator;
 
-        public UserLogic(IUserWorkOfUnit work, ITranslator translator, IValidatorWithTranslator<UserRegisterRequest> validator) : base(translator)
+        public UserLogic(IUserWorkOfUnit work, ITranslator translator, IValidatorWithTranslator<UserRegisterRequest> validator,IAppSetting appSetting) : base(translator,work, appSetting)
         {
             _work = work;
             _validator = validator;
         }
 
-        public MessageResponse DeleteWithId(string language, object id)
+        public MessageResponse DeleteWithId(string language, string sessionId, object id)
         {
             throw new NotImplementedException();
         }
 
-        public IdResponse Insert(string language, UserRequest request)
+        public IdResponse Insert(string language, string sessionId, UserRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserResponse> Load(string language, object parentId)
+        public IEnumerable<UserResponse> Load(string language, string sessionId, object parentId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserResponse> LoadAll(string language)
+        public IEnumerable<UserResponse> LoadAll(string language,string sessionId)
         {
             throw new NotImplementedException();
         }
 
-        public UserResponse LoadWithId(string language, object id)
+        public UserResponse LoadWithId(string language, string sessionId, object id)
         {
             throw new NotImplementedException();
         }
 
+        public MessageResponse Update(string language, string sessionId, UserRequest request)
+        {
+            throw new NotImplementedException();
+        }
         public UserLoginResponse Login(string language, UserLoginRequest request)
         {
             string errorMessageKey = "";
@@ -69,11 +73,12 @@ namespace Domain.Logics
                 }
                 errorMessageKey = ConstentMessages.LoadRoleError;
                 Dictionary<string, string> moduleRights = _work.LoadModuleRights(user.RoleId);
+                
                 DateTime utcNow = DateTime.UtcNow;
                 user.Session = new AppSession { Id = ObjectId.GenerateNewId().ToString(), CreateTs = utcNow, UpdateTs = utcNow };
                 errorMessageKey = ConstentMessages.CreateSessionForUserError;
                 _work.UpdateAppUser(user);
-                return new UserLoginResponse { UserName = user.Name, SessionId = user.Session.Id, UpdateTs = user.Session.UpdateTs.ToJsTime(), ModuleRights = moduleRights };
+                return new UserLoginResponse { UserName = user.Name, SessionId = user.Session.Id, UpdateTs = user.Session.UpdateTs.ToJsTime(), ModuleRights = moduleRights,AppSetting=_appSetting };
             }
             catch (Exception ex)
             {
@@ -109,9 +114,6 @@ namespace Domain.Logics
 
         }
 
-        public MessageResponse Update(string language, UserRequest request)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
