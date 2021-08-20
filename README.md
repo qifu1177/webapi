@@ -39,6 +39,7 @@ For the project shoud be installed docker and nodejs
 - nodejs installation, go to https://nodejs.org/en/download/
 
 ### Build for production
+- Build MongoDB, go to folder "WebApi\MongoDB", then run `docker-compose up`
 - Go to folder "WebApi\AngularApp", then run `npm install`, then run `npm run build`
 ### Run 
 - Go to folder "WebApi", then run `docker-compose up`, then open `http://localhost:5000` 
