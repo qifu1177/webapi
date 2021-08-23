@@ -8,9 +8,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IUserLogic<Request,Response>:ILogic<Request,Response> where Request:IRequest where Response:IResponse
+    public interface IUserLogic
     {
         UserLoginResponse Login(string language,UserLoginRequest request);
         MessageResponse Register(string language, UserRegisterRequest request);
+        MessageSessionResponse ChangePassword(string language, string sessionId, PasswordRequest request);
+        MessageSessionResponse UpdateUserInfo(string language, string sessionId, UserRequest request);
+        UserSessionResponse LoadUserInfo(string language, string sessionId);
     }
 }

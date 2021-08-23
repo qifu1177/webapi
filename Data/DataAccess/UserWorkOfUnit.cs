@@ -81,5 +81,32 @@ namespace Data.DataAccess
                 return list.First();
             return null;
         }
+
+        public void DeleteUserWithId(string id)
+        {
+            _repository.DeleteWithId(id);
+        }
+
+        public void InserUser(AppUser user)
+        {
+            _repository.Insert(user);
+        }
+
+        public AppUser LoadUserWithId(string id)
+        {
+            return _repository.LoadWithId(id);
+        }
+
+        
+
+        public IEnumerable<AppUser> LoadAllUser()
+        {
+            return _repository.LoadAll();
+        }
+
+        public IEnumerable<AppUser> LoadUsersWithParentId(string accountUserId)
+        {
+            return _repository.Load(item => item.AccountUserId == accountUserId);
+        }
     }
 }

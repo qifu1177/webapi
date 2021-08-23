@@ -9,5 +9,15 @@ namespace Domain.Models.Responses
 {
     public class UserResponse:IResponse
     {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public double UpdateTs { get; set; }
+        public string Email { get; set; }
+        public string RoleId { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool? MaritalStatus { get; set; }
+        public string BirthDate { get; set; }
+        public string PhotoPath { get; set; }
+
     }
 }

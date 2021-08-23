@@ -61,18 +61,18 @@ namespace Domain
                             {
                                 foreach (var module in modulesList)
                                 {
-                                    if (module.Name == "AppRole")
+                                    if (module.Name == EnumData.AppModules.AppRole.ToString())
                                         continue;
-                                    role.ModuleRights.Add(module.Name, EnumData.RoleRight.all.ToString());
+                                    role.ModuleRights.Add(module.Name, EnumData.RoleRight.account.ToString());
                                 }
                             }
                             if (role.Name == EnumData.Role.User.ToString())
                             {
                                 foreach (var module in modulesList)
                                 {
-                                    if (module.Name == "AppRole" || module.Name== "AppUser")
+                                    if (module.Name == EnumData.AppModules.AppRole.ToString() || module.Name== EnumData.AppModules.AppUser.ToString())
                                         continue;
-                                    role.ModuleRights.Add(module.Name, EnumData.RoleRight.read.ToString());
+                                    role.ModuleRights.Add(module.Name, EnumData.RoleRight.user.ToString());
                                 }
                             }
                             repository.Insert( role);
@@ -86,11 +86,11 @@ namespace Domain
         public void InitModules()
         {
             List<AppModule> list = new List<AppModule>();
-            list.Add(new AppModule { Name = "AppUser" });
-            list.Add(new AppModule { Name = "AppRole" });
-            list.Add(new AppModule { Name = "House" });
-            list.Add(new AppModule { Name = "Thing" });
-            list.Add(new AppModule { Name = "GridThings" });
+            list.Add(new AppModule { Name = EnumData.AppModules.AppUser.ToString() });
+            list.Add(new AppModule { Name = EnumData.AppModules.AppRole.ToString() });
+            list.Add(new AppModule { Name = EnumData.AppModules.House.ToString() });
+            list.Add(new AppModule { Name = EnumData.AppModules.Thing.ToString() });
+            list.Add(new AppModule { Name = EnumData.AppModules.GridThings.ToString() });
             using (var scope = _container.BeginLifetimeScope())
             {
                 var work = scope.Resolve<IWorkOfUnit>();

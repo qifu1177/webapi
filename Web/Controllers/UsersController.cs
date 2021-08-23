@@ -17,10 +17,10 @@ namespace Web.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UsersController : AbstractController<UsersController,UserRequest,UserResponse>
+    public class UsersController : AbstractController<UsersController,UserRequest,UserListResponse>
     {
-        private IUserLogic<UserRequest,UserResponse> _userLogic;
-        public UsersController(IConfiguration configuration, ILogger<UsersController> logger, ITranslator translator, IUserLogic<UserRequest,UserResponse> logic):base(configuration,logger, translator,logic)
+        private IUserLogic _userLogic;
+        public UsersController(IConfiguration configuration, ILogger<UsersController> logger, ITranslator translator, IUserLogic logic):base(configuration,logger, translator,null)
         {
             _userLogic = logic;
         }
@@ -44,6 +44,35 @@ namespace Web.Controllers
             });
 
         }
-        
+        [HttpPut("changepassword/{sessionid}/{language}")]
+        public IActionResult ChangeLanguage(string sessionid,string language, PasswordRequest request)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                MessageSessionResponse response = _userLogic.ChangePassword(language, sessionid, request); 
+                return Ok(response);
+            });
+
+        }
+        [HttpGet("{sessionid}/{language}")]
+        public IActionResult Load(string sessionid, string language)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                UserSessionResponse response = _userLogic.LoadUserInfo(language, sessionid);
+                return Ok(response);
+            });
+
+        }
+        [HttpPut("update/{sessionid}/{language}")]
+        public IActionResult Update(string sessionid, string language,UserRequest request)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                MessageSessionResponse response = _userLogic.UpdateUserInfo(language, sessionid,request);
+                return Ok(response);
+            });
+
+        }
     }
 }

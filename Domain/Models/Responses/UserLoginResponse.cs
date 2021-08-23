@@ -9,11 +9,10 @@ using System.Threading.Tasks;
 namespace Domain.Models.Responses
 {
 
-    public class UserLoginResponse:IResponse
+    public class UserLoginResponse : SessionResponse
     {
         public string UserName { get; set; }
-        public string SessionId { get; set; }
-        public double UpdateTs { get; set; }
+
         public Dictionary<string, string> ModuleRights { get; set; }
         public IAppSetting AppSetting { get; set; }
     }

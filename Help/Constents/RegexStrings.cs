@@ -10,5 +10,6 @@ namespace Help.Constents
     {
         public const string EmailFormExpression = @".+@{1}\w+\.{1}\w{2,}";
         public const string AdressFormExpression = @".+\d+\s*\,*\s*\d{5}.*";
+        public const string DateStringExpression = @"^\d{4}-\d{2}-\d{2}$";
     }
 }

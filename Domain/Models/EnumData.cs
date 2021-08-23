@@ -8,11 +8,19 @@ namespace Domain.Models
 {
     public class EnumData
     {
+        public enum AppModules
+        {
+            AppUser,
+            AppRole,
+            House,
+            Thing,
+            GridThings
+        }
         public enum RoleRight
         {
             all,
-            write,
-            read,
+            account,
+            user,
             no
         }
         public enum Role

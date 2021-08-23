@@ -11,11 +11,14 @@ namespace Help
 {
     public class Translator : ITranslator
     {
-        List<JsonLocalization> localization = new List<JsonLocalization>();
+        Dictionary<string, JsonLocalization> _localizationDic = new Dictionary<string, JsonLocalization>();
         public Translator(string jsonStr)
         {
-            localization = JsonConvert.DeserializeObject<List<JsonLocalization>>(jsonStr);
-
+            List<JsonLocalization>  localization = JsonConvert.DeserializeObject<List<JsonLocalization>>(jsonStr);
+            foreach(var item in localization)
+            {
+                _localizationDic[item.Key] = item;
+            }
         }
         public Translator(Assembly assembly, string namespaceAndFileName):this(EmbeddedResource.GetApiRequestFile(assembly,namespaceAndFileName))
         {
@@ -37,11 +40,10 @@ namespace Help
         }
 
         private string GetString(string name, string language = "en")
-        {
-            var query = localization.Where(l => l.Key==name);
-            if(query.Count()>0)
+        {            
+            if(_localizationDic.ContainsKey(name))
             {
-                Dictionary<string, string> dic = query.First().LocalizedValue;
+                Dictionary<string, string> dic = _localizationDic[name].LocalizedValue;
                 if (dic.ContainsKey(language))
                     return dic[language];
                 else

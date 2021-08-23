@@ -25,7 +25,9 @@ namespace Domain
         {
             builder.RegisterModule(new Data.Module(_connectionStr, _dbName));
             builder.RegisterType<UserRegisterRequestValidator>().As<IValidatorWithTranslator<UserRegisterRequest>>().InstancePerLifetimeScope();
-            builder.RegisterType<UserLogic>().As<IUserLogic<UserRequest,UserResponse>>().InstancePerLifetimeScope();
+            builder.RegisterType<UserRequestValidator>().As<IValidatorWithTranslator<UserRequest>>().InstancePerLifetimeScope();
+            builder.RegisterType<UserLogic>().As<IUserLogic>().InstancePerLifetimeScope();
+            builder.RegisterType<UserAdminLogic>().As<ILogic<UserRequest, UserListResponse>>().InstancePerLifetimeScope();
         }
     }
 }

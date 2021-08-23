@@ -10,6 +10,8 @@ namespace Help.Constents
     {
         // Error message key
         public const string UserNotExist = "UserNotExist";
+        public const string UserIsChanged = "UserIsChanged";
+        public const string PasswordNotRight = "PasswordNotRight";
         public const string LoadRoleError = "LoadRoleError";
         public const string CreateSessionForUserError = "CreateSessionForUserError";
         public const string SaveUserError = "SaveUserError";
@@ -17,6 +19,8 @@ namespace Help.Constents
         public const string EmailIsExist = "EmailIsExist";
         public const string UserNameIsExist = "UserNameIsExist";
         public const string SessionIdIsInvalid = "SessionIdIsInvalid";
+        public const string UserHasNotRight = "UserHasNotRight";
+        public const string ServerError = "ServerError";
                 
     }
 }

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Models.Responses
 {
-    public class IdResponse:SessionResponse
+    public class SessionResponse:IResponse
     {
-        public object Id { get; set; }
+        public string SessionId { get; set; }
+        public double SessionUpdateTs { get; set; }
     }
 }
