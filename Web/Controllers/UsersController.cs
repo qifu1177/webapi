@@ -74,5 +74,15 @@ namespace Web.Controllers
             });
 
         }
+        [HttpPut("resetpassword/{language}/{email}")]
+        public IActionResult ResetPassword( string language,string email)
+        {
+            return this.RequestHandler(language, () =>
+            {
+                MessageResponse response = _userLogic.CreateNewPassword(language,email);
+                return Ok(response);
+            });
+
+        }
     }
 }

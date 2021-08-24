@@ -19,17 +19,17 @@ namespace Data.DataAccess
             _repository = userRepository.Init(_db);
             _roleRepository = roleRepository.Init(_db);
         }
-        public AppUser LoadUserWithEmail(string email, string password)
+        public AppUser LoadUserWithEmail(string email)
         {
-            IEnumerable<AppUser> list = _repository.Load(item => item.Email.ToLower() == email.ToLower() && item.Password == password);
+            IEnumerable<AppUser> list = _repository.Load(item => item.Email.ToLower() == email.ToLower() );
             if (list.Count() > 0)
                 return list.First();
             return null;
         }
 
-        public AppUser LoadUserWithUn(string userName, string password)
+        public AppUser LoadUserWithUn(string userName)
         {
-            IEnumerable<AppUser> list = _repository.Load(item => item.Name == userName && item.Password == password);
+            IEnumerable<AppUser> list = _repository.Load(item => item.Name == userName);
             if (list.Count() > 0)
                 return list.First();
             return null;

@@ -21,6 +21,10 @@ namespace Help.Constents
         public const string SessionIdIsInvalid = "SessionIdIsInvalid";
         public const string UserHasNotRight = "UserHasNotRight";
         public const string ServerError = "ServerError";
-                
+
+        public const string EmailCreateSuject = "EmailCreateSuject";
+        public const string EmailCreateBody = "EmailCreateBody";
+
+
     }
 }

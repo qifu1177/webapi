@@ -12,5 +12,9 @@ namespace Help.Datas
         public int SessionDuration { get; set; } = 600;
         public int UploadFileMaxSize { get; set; } = 1;
         public List<string> UploadFileTypes { get; set; } = new List<string>();
+        public string EmailHost { get; set; }
+        public int EmailPort { get ; set ; }
+        public string SenderAccount { get; set; }
+        public string SenderAccountPassword { get; set; }
     }
 }

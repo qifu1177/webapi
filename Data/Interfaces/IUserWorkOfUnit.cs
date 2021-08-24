@@ -10,8 +10,8 @@ namespace Data.Interfaces
     public interface IUserWorkOfUnit
     {
         AppUser LoadUserWithId(string id);
-        AppUser LoadUserWithUn(string userName, string password);
-        AppUser LoadUserWithEmail(string email, string password);
+        AppUser LoadUserWithUn(string userName);
+        AppUser LoadUserWithEmail(string email);
         AppUser LoadUserWithSessionId(string sessionId);
         IEnumerable<AppUser> LoadAllUser();
         IEnumerable<AppUser> LoadUsersWithParentId(string accountUserId);

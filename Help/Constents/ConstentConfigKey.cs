@@ -14,5 +14,11 @@ namespace Help.Constents
         public const string UploadFile_MaxSize = "UserSetting:UploadFile:MaxSize";
         public const string UploadFile_Type = "UserSetting:UploadFile:Type";
         public const string Config_LoggingFile = "LoggingFile";
+
+        public const string EmailServer_Host = "UserSetting:EmailServer:Host";
+        public const string EmailServer_Port = "UserSetting:EmailServer:Port";
+        public const string EmailServer_From = "UserSetting:EmailServer:From";
+        public const string EmailServer_FromPassword = "UserSetting:EmailServer:FromPassword";
+
     }
 }

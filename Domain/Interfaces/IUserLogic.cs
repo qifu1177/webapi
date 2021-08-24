@@ -15,5 +15,6 @@ namespace Domain.Interfaces
         MessageSessionResponse ChangePassword(string language, string sessionId, PasswordRequest request);
         MessageSessionResponse UpdateUserInfo(string language, string sessionId, UserRequest request);
         UserSessionResponse LoadUserInfo(string language, string sessionId);
+        MessageResponse CreateNewPassword(string language, string email);
     }
 }
