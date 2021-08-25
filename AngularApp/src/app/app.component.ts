@@ -4,7 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { ConfigLoaderService } from 'projects/config-loader/';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -19,7 +18,7 @@ export class AppComponent implements OnInit {
   }
   init() {
     this.loadConfig();
-    this._translate.setDefaultLang(GlobalConstants.defaultLanguage);
+    this._translate.setDefaultLang(GlobalConstants.currentLanguage);
   }
   loadConfig() {
     if (this._configLoader.getConfigObjectKey("apiUrl") != null)
@@ -27,7 +26,7 @@ export class AppComponent implements OnInit {
     if (this._configLoader.getConfigObjectKey("title") != null)
       GlobalConstants.title = this._configLoader.getConfigObjectKey("title");
     if (this._configLoader.getConfigObjectKey("languageSetting") != null) {
-      GlobalConstants.defaultLanguage = this._configLoader.getConfigObjectKey("languageSetting")["default"];
+      GlobalConstants.currentLanguage = this._configLoader.getConfigObjectKey("languageSetting")["default"];
       GlobalConstants.languages = this._configLoader.getConfigObjectKey("languageSetting")["languages"];
     }
   }
@@ -38,12 +37,13 @@ export class AppComponent implements OnInit {
   }
   changeLanguage(ln:string){
     this._translate.setDefaultLang(ln);
+    GlobalConstants.currentLanguage =ln;
   }
   goHome(){
     this._router.navigate(["home"]);
   }
   login(){
-    this._router.navigate(["user-login"])
+    this._router.navigate(["user-login"]);
   }
   logout(){
 

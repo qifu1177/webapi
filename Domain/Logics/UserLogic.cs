@@ -56,7 +56,7 @@ namespace Domain.Logics
                 user.Session = new AppSession { Id = ObjectId.GenerateNewId().ToString(), CreateTs = utcNow, UpdateTs = utcNow };
                 errorMessageKey = ConstentMessages.CreateSessionForUserError;
                 _work.UpdateAppUser(user);
-                return new UserLoginResponse { UserName = user.Name, SessionId = user.Session.Id, SessionUpdateTs = user.Session.UpdateTs.ToJsTime(), ModuleRights = moduleRights, AppSetting = _appSetting };
+                return new UserLoginResponse { UserName = user.Name, SessionId = user.Session.Id, SessionUpdateTs = user.Session.UpdateTs.ToJsTime(), ModuleRights = moduleRights, SessionDuration = _appSetting.SessionDuration,UploadFileMaxSize=_appSetting.UploadFileMaxSize,UploadFileTypes=_appSetting.UploadFileTypes };
             }
             catch (Exception ex)
             {

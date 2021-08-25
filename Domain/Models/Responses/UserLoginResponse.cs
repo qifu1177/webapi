@@ -14,6 +14,8 @@ namespace Domain.Models.Responses
         public string UserName { get; set; }
 
         public Dictionary<string, string> ModuleRights { get; set; }
-        public IAppSetting AppSetting { get; set; }
+        public int SessionDuration { get; set; }
+        public int UploadFileMaxSize { get; set; }
+        public List<string> UploadFileTypes { get; set; }
     }
 }

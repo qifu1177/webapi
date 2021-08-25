@@ -1,22 +1,22 @@
 
 <div>
     <mat-toolbar color="primary">
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <button mat-icon-button class="app-icon" aria-label="Example icon-button with menu icon">
           <mat-icon>menu</mat-icon>
         </button>
         <span (click)="goHome()">{{title}}</span>
-        <span class="example-spacer"></span>
+        <span class="app-spacer"></span>
         <span *ngIf="isLogin" >
-        <button mat-icon-button (click)="logout()" class="example-icon" aria-label="Example icon-button with person_outline icon">
+        <button mat-icon-button (click)="logout()" class="app-icon" aria-label="Example icon-button with person_outline icon">
           <mat-icon>person_outline</mat-icon>
         </button>
       </span>
       <span *ngIf="!isLogin" >
-        <button mat-icon-button (click)="login()" class="example-icon" aria-label="Example icon-button with person icon">
+        <button mat-icon-button (click)="login()" class="app-icon" aria-label="Example icon-button with person icon">
           <mat-icon>person</mat-icon>
         </button>
       </span>
-        <button mat-icon-button class="example-icon" [matMenuTriggerFor]="languageMenu" aria-label="Example icon-button with language icon">
+        <button mat-icon-button class="app-icon" [matMenuTriggerFor]="languageMenu" aria-label="Example icon-button with language icon">
           <mat-icon>language</mat-icon>
         </button>
         <mat-menu #languageMenu="matMenu">

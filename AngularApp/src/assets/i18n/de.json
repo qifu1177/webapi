@@ -1,4 +1,17 @@
 {
     "en": "Englisch",
-    "de": "Deutsche"
+    "de": "Deutsche",
+    "ui": {
+        "login": "Anmelden",
+        "loginName": "Email/Benutzername",
+        "password": "Passwort",
+        "register": "Konto erstellen",
+        "email":"Email",
+        "userName":"Benutzername"
+    },
+    "messages":{
+        "pageNotFoundTitle":"Seite wurde nicht gefunden",
+        "pageNotFountText":"Die Seite kann nicht gefunden werden!",
+        "required":"{{value}} ist erfordlich!"
+    }
 }

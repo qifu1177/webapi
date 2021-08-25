@@ -1,5 +1,14 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';  
 import { RouterModule, Routes } from '@angular/router';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ConfigLoaderModule } from 'projects/config-loader/';
+
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatNativeDateModule} from '@angular/material/core';
+import {AppMaterialModule} from './material-module';
 
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {UserLoginComponent} from './user-login/user-login.component';
@@ -16,8 +25,43 @@ const routes: Routes = [
 
 ];
 
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
+}
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  declarations:[
+    PageNotFoundComponent,
+    HomeComponent,
+    UserLoginComponent,
+    UserRegisterComponent
+  ],
+  imports: [
+    RouterModule.forRoot(routes),
+    ConfigLoaderModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
+    FormsModule,
+    ReactiveFormsModule,
+    MatNativeDateModule,
+    AppMaterialModule,
+    CommonModule,
+    HttpClientModule],
+  exports: [
+    RouterModule,
+    ConfigLoaderModule,
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatNativeDateModule,
+    AppMaterialModule,
+    CommonModule,
+    HttpClientModule
+  ]
 })
 export class AppRoutingModule { }

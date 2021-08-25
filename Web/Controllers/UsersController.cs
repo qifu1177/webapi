@@ -74,7 +74,7 @@ namespace Web.Controllers
             });
 
         }
-        [HttpPut("resetpassword/{language}/{email}")]
+        [HttpPut("resetpassword/{email}/{language}")]
         public IActionResult ResetPassword( string language,string email)
         {
             return this.RequestHandler(language, () =>
