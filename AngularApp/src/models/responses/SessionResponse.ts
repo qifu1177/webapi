@@ -1,4 +1,4 @@
 export interface SessionResponse{
-    SessionId:string;
-    SessionUpdateTs:number;
+    sessionId:string;
+    sessionUpdateTs:number;
 }

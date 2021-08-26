@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormErrorStateMatcher } from '../shared/form-error-state-matcher';
 import { HttpBaseComponent } from '../shared/ui-base-http.component';
 import { UserLoginResponse } from 'src/models/responses/UserLoginResponse';
-import { TranslateService } from '@ngx-translate/core';
+import { Md5 } from 'ts-md5';
 
 
 @Component({
@@ -17,7 +17,6 @@ export class UserLoginComponent extends HttpBaseComponent implements OnInit {
 
   matcher: FormErrorStateMatcher = new FormErrorStateMatcher();
   response!: UserLoginResponse;
-  errorMessage!: string;
   loginNameFormControl!: FormControl;
   passwordFormControl!: FormControl;
 
@@ -27,13 +26,14 @@ export class UserLoginComponent extends HttpBaseComponent implements OnInit {
     this.passwordFormControl = new FormControl(this.request.password, [Validators.required]);
   }
   login() {
-    this._http.post<UserLoginResponse>(this.createUrl('Users/login'), this.request).subscribe({
+    let password=Md5.hashStr(this.passwordFormControl.value);
+    let loginRequset:UserLoginRequest={loginName:this.loginNameFormControl.value,password:`${password}`};
+    this._http.post<UserLoginResponse>(this.createUrl('Users/login'),loginRequset ).subscribe({
       next: data => {
         this.response = data;
       },
       error: error => {
-        this.errorMessage = error.message;
-        console.error('There was an error!', error);
+        this.showError(error);        
       }
     });
   }

@@ -7,7 +7,8 @@
         "password": "Passwort",
         "register": "Konto erstellen",
         "email":"Email",
-        "userName":"Benutzername"
+        "userName":"Benutzername",
+        "close":"Schließen"
     },
     "messages":{
         "pageNotFoundTitle":"Seite wurde nicht gefunden",

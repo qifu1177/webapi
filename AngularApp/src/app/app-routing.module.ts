@@ -15,6 +15,8 @@ import {UserLoginComponent} from './user-login/user-login.component';
 import { UserRegisterComponent } from './user-register/user-register.component';
 import { HomeComponent } from './home/home.component';
 
+import { ErrorDialog } from './shared/error-dialog/error-dialog.component';
+
 const routes: Routes = [
   {path: 'page-not-fount', component: PageNotFoundComponent},
   {path: 'home', component: HomeComponent},
@@ -34,7 +36,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     PageNotFoundComponent,
     HomeComponent,
     UserLoginComponent,
-    UserRegisterComponent
+    UserRegisterComponent,
+    ErrorDialog
   ],
   imports: [
     RouterModule.forRoot(routes),

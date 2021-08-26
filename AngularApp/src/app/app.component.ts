@@ -3,6 +3,8 @@ import { GlobalConstants } from 'src/common/global-constants';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfigLoaderService } from 'projects/config-loader/';
 import { Router } from '@angular/router';
+import { UserLoginResponse } from 'src/models/responses/UserLoginResponse';
+
 
 @Component({
   selector: 'app-root',
@@ -13,6 +15,7 @@ export class AppComponent implements OnInit {
   public title: string = "";
   public languages: string[] = [];
   public isLogin:boolean=false;
+  
   constructor(private _configLoader: ConfigLoaderService, private _translate: TranslateService, private _router:Router) {
     this.init();
   }
