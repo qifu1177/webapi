@@ -5,6 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import {StoreConfig,StoreModule} from 'projects/store';
+import {UserState} from 'src/common/stores/user.state';
+import { UserLoginResponse } from 'src/models/responses/UserLoginResponse';
+
+
 @NgModule({
   declarations: [
     AppComponent
@@ -12,7 +17,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule 
+    BrowserAnimationsModule,
+    StoreModule.forRoot<UserLoginResponse>({key:"user", state:new UserState()})
   ],
   providers: [
   ],

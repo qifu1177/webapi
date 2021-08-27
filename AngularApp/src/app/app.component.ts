@@ -3,6 +3,7 @@ import { GlobalConstants } from 'src/common/global-constants';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfigLoaderService } from 'projects/config-loader/';
 import { Router } from '@angular/router';
+import {Store} from "projects/store";
 import { UserLoginResponse } from 'src/models/responses/UserLoginResponse';
 
 
@@ -14,7 +15,6 @@ import { UserLoginResponse } from 'src/models/responses/UserLoginResponse';
 export class AppComponent implements OnInit {
   public title: string = "";
   public languages: string[] = [];
-  public isLogin:boolean=false;
   
   constructor(private _configLoader: ConfigLoaderService, private _translate: TranslateService, private _router:Router) {
     this.init();
@@ -49,6 +49,9 @@ export class AppComponent implements OnInit {
     this._router.navigate(["user-login"]);
   }
   logout(){
-
+    Store.action("user","logout")();
+  }
+  isLogin(){
+    return Store.func("user","checkLogin")();
   }
 }

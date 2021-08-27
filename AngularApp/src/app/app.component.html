@@ -6,12 +6,12 @@
         </button>
         <span (click)="goHome()">{{title}}</span>
         <span class="app-spacer"></span>
-        <span *ngIf="isLogin" >
+        <span *ngIf="isLogin()" >
         <button mat-icon-button (click)="logout()" class="app-icon" aria-label="Example icon-button with person_outline icon">
           <mat-icon>person_outline</mat-icon>
         </button>
       </span>
-      <span *ngIf="!isLogin" >
+      <span *ngIf="!isLogin()" >
         <button mat-icon-button (click)="login()" class="app-icon" aria-label="Example icon-button with person icon">
           <mat-icon>person</mat-icon>
         </button>
