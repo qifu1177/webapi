@@ -3,16 +3,19 @@
     "de": "German",
     "ui": {
         "login": "Login",
-        "loginName": "Email/User name",
         "password": "Password",
         "register": "Register",
         "email":"Email",
         "userName":"User name",
-        "close":"close"
+        "close":"Close",
+        "logout":"Logout",
+        "back":"Back",
+        "changePassword":"Change password"
     },
     "messages":{
         "pageNotFoundTitle":"Page not found",
         "pageNotFountText":"The page cannot be found!",
-        "required":"{{value}} is required!"
+        "required":"{{value}} is required!",
+        "emailInvalid":"Not a valid email"
     }
 }

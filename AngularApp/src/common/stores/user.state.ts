@@ -1,5 +1,6 @@
 import { State } from "projects/store";
 import { UserLoginResponse } from "src/models/responses/UserLoginResponse";
+import {SessionResponse} from 'src/models/responses/SessionResponse';
 export class UserState extends State<UserLoginResponse>{
 
     constructor() {
@@ -8,6 +9,7 @@ export class UserState extends State<UserLoginResponse>{
         this.createAction("login", this.login);
         this.createAction("logout", this.logout);
         this.createFunc("checkLogin", this.checkLogin);
+        this.createAction("updateSession",this.updateSession);
     }
     
     login(user: UserLoginResponse, args:any) {
@@ -35,5 +37,10 @@ export class UserState extends State<UserLoginResponse>{
         if (b)
             b = ((new Date()).getTime() - user.sessionUpdateTs) < user.sessionDuration * 1000;
         return b;
+    }
+    updateSession(user: UserLoginResponse,args:any){
+        let session:SessionResponse=args[0];
+        user.sessionId=session.sessionId;
+        user.sessionUpdateTs=session.sessionUpdateTs;
     }
 }

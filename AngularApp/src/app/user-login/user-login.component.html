@@ -1,38 +1,29 @@
 <div class="app-container">
-<mat-card>
-  <mat-card-content>
-    <h2 class="app-h2">{{'ui.login'|translate}}</h2>
-<div>
-    <mat-form-field class="app-full-width" appearance="fill">
-      <mat-label>{{'ui.loginName'|translate}}</mat-label>
-      <input type="text" matInput [formControl]="loginNameFormControl" [errorStateMatcher]="matcher" placeholder="">
-
-      <mat-error *ngIf="loginNameFormControl.hasError('required')" [translate]="'messages.required'"
-        [translateParams]="{value: t('ui.loginName')}">
-
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="app-full-width" appearance="fill">
-      <mat-label>{{'ui.password'|translate}}</mat-label>
-      <input type="password" matInput [formControl]="passwordFormControl" [errorStateMatcher]="matcher" placeholder="">
-
-      <mat-error *ngIf="passwordFormControl.hasError('required')" [translate]="'messages.required'"
-        [translateParams]="{value: t('ui.password')}">
-
-      </mat-error>
-    </mat-form-field>
-  </div>
-    <section>
-      <div class="app-button-row">
-        <button mat-stroked-button (click)="register()">{{'ui.register'|translate}}</button>
-        <button mat-stroked-button color="primary" (click)="login()"
-          [disabled]="invalid()">{{'ui.login'|translate}}</button>
+  <mat-card>
+    <mat-card-content>
+      <h2 class="app-h2">{{'ui.login'|translate}}</h2>
+      <div>
+        <validation-input [formInstanz]="instanz" translateLabel="ui.email" placeholder="xxx@example.com"
+          inputType="email" [control]="loginNameFormControl" [matcher]="matcher" errorMessageCall="getErrorMessage"
+          inputKey="loginName"></validation-input>
 
       </div>
-    </section>
+      <div>
+        <validation-input [formInstanz]="instanz" translateLabel="ui.password" placeholder="" inputType="password"
+          [control]="passwordFormControl" [matcher]="matcher" errorMessageCall="getErrorMessage" inputKey="password"
+          erterAction="login"></validation-input>
 
-  </mat-card-content>
-</mat-card>
+      </div>
+      <section>
+        <div class="app-button-row">
+          <button mat-stroked-button (click)="register()" [disabled]="waiting">{{'ui.register'|translate}}</button>
+          <button mat-stroked-button color="primary" (click)="login()"
+            [disabled]="invalid() || waiting">{{'ui.login'|translate}}</button>
+          
+        </div>
+        <mat-spinner diameter="30" *ngIf="waiting"></mat-spinner>
+      </section>
+
+    </mat-card-content>
+  </mat-card>
 </div>

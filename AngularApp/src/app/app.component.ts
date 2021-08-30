@@ -31,6 +31,9 @@ export class AppComponent implements OnInit {
     if (this._configLoader.getConfigObjectKey("languageSetting") != null) {
       GlobalConstants.currentLanguage = this._configLoader.getConfigObjectKey("languageSetting")["default"];
       GlobalConstants.languages = this._configLoader.getConfigObjectKey("languageSetting")["languages"];
+      let ln=localStorage.getItem("currentLanguage");
+      if(ln)
+        GlobalConstants.currentLanguage=ln;
     }
   }
   ngOnInit() {
@@ -41,6 +44,7 @@ export class AppComponent implements OnInit {
   changeLanguage(ln:string){
     this._translate.setDefaultLang(ln);
     GlobalConstants.currentLanguage =ln;
+    localStorage.setItem("currentLanguage",GlobalConstants.currentLanguage);
   }
   goHome(){
     this._router.navigate(["home"]);
@@ -53,5 +57,13 @@ export class AppComponent implements OnInit {
   }
   isLogin(){
     return Store.func("user","checkLogin")();
+  }
+  userInfo(){
+    this._router.navigate(["user-info"]);
+  }
+  userName(){
+    let user:UserLoginResponse;
+    user= Store.get("user");
+    return user.userName;
   }
 }

@@ -41,9 +41,7 @@ namespace Domain.Logics
             string errorMessageKey = "";
             try
             {
-                AppUser user = _work.LoadUserWithUn(request.LoginName);
-                if (user == null || request.Password != user.Password)
-                    user = _work.LoadUserWithEmail(request.LoginName);
+                AppUser user = _work.LoadUserWithEmail(request.LoginName);            
                 if (user == null || request.Password != user.Password)
                 {
                     errorMessageKey = ConstentMessages.UserNotExist;
@@ -71,8 +69,8 @@ namespace Domain.Logics
             {
                 if (_work.EmailIsExist(request.Email))
                     throw new TranslationException(_translator, language, ConstentMessages.EmailIsExist, null);
-                if (_work.UserNameIsExist(request.UserName))
-                    throw new TranslationException(_translator, language, ConstentMessages.UserNameIsExist, null);
+                //if (_work.UserNameIsExist(request.UserName))
+                //    throw new TranslationException(_translator, language, ConstentMessages.UserNameIsExist, null);
                 string errorMessageKey = "";
                 try
                 {
