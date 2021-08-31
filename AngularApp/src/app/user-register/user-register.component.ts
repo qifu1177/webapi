@@ -13,7 +13,6 @@ import { UserRegisterRequest } from 'src/models/requests/UserRegisterRequest';
 })
 export class UserRegisterComponent extends HttpBaseComponent {
     instanz: UserRegisterComponent = this;
-    waiting:boolean=false;
     userNameControl!: FormControl;
     emailControl!: FormControl;
     pswControl!: FormControl;
@@ -40,20 +39,12 @@ export class UserRegisterComponent extends HttpBaseComponent {
     }
     register() {
         if(this.invalid())
-            return;
-        this.waiting=true;
+            return;       
         let password = Md5.hashStr(this.pswControl.value);
         let request: UserRegisterRequest = { userName: this.userNameControl.value, email: this.emailControl.value, password: password };
-        this._http.post<MessageResponse>(this.createUrl('Users/register'), request).subscribe({
-            next: data => {
-                this.waiting=false;
-                this.back();
-            },
-            error: error => {
-                this.waiting=false;
-                this.showError(error);
-            }
-        });
+        this.post<MessageResponse>('Users/register', request, (data) => {           
+            this.back();
+          });          
     }
     
     invalid(): boolean {

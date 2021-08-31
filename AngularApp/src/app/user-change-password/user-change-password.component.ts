@@ -15,6 +15,7 @@ import { RegexStrings } from "src/common/constents/RegexStrings";
 export class UserChangePasswordComponent extends HttpBaseComponent implements OnInit {
     instanz:UserChangePasswordComponent=this;
     waiting:boolean=false;
+    
     oldPswFormControl!: FormControl;
     newPswFormControl!: FormControl;
     newPswConfirmFormControl!: FormControl;
@@ -41,7 +42,7 @@ export class UserChangePasswordComponent extends HttpBaseComponent implements On
         let oldPsw = Md5.hashStr(this.oldPswFormControl.value);
         let newPsw = Md5.hashStr(this.newPswFormControl.value);
         let request: PasswordRequest = { oldPassword: oldPsw, newPassword: newPsw };
-        this._http.post<MessageSessionResponse>(this.createUrl('Users/changepassword'), request).subscribe({
+        this._http.put<MessageSessionResponse>(this.createUrl('Users/changepassword'), request).subscribe({
             next: data => {
                 this.waiting=false;
                 Store.action("user", "updateSession")(data);

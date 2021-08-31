@@ -17,6 +17,7 @@
       <section>
         <div class="app-button-row">
           <button mat-stroked-button (click)="register()" [disabled]="waiting">{{'ui.register'|translate}}</button>
+          <button mat-stroked-button (click)="forgetPassword()" [disabled]="waiting">{{'ui.forgetPassword'|translate}}</button>
           <button mat-stroked-button color="primary" (click)="login()"
             [disabled]="invalid() || waiting">{{'ui.login'|translate}}</button>
           

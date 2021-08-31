@@ -45,7 +45,7 @@ namespace Web.Controllers
 
         }
         [HttpPut("changepassword/{sessionid}/{language}")]
-        public IActionResult ChangeLanguage(string sessionid,string language, PasswordRequest request)
+        public IActionResult ChangePassword(string sessionid,string language, PasswordRequest request)
         {
             return this.RequestHandler(language, () =>
             {

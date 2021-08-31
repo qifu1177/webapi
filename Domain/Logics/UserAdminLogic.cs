@@ -9,6 +9,7 @@ using Help.Constents;
 using Help.Exceptions;
 using Help.Extensions;
 using Help.Interfaces;
+using Help.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,15 @@ namespace Domain.Logics
     {
         private IUserWorkOfUnit _work;
         private IValidatorWithTranslator<UserRequest> _userValidator;
+        private IPasswordService _passwordService;
+        private IEmailService _emailService;
 
-        public UserAdminLogic(IUserWorkOfUnit work, ITranslator translator, IValidatorWithTranslator<UserRequest> userValidator, IAppSetting appSetting) : base(translator, work, appSetting)
+        public UserAdminLogic(IUserWorkOfUnit work, ITranslator translator, IValidatorWithTranslator<UserRequest> userValidator, IAppSetting appSetting, IPasswordService passwordService, IEmailService emailService) : base(translator, work, appSetting)
         {
             _work = work;
             _userValidator = userValidator;
+            _passwordService = passwordService;
+            _emailService = emailService;
         }
         public MessageSessionResponse DeleteWithId(string language, string sessionId, object id)
         {
@@ -63,7 +68,11 @@ namespace Domain.Logics
             try
             {
                 errorMessageKey = ConstentMessages.ServerError;
-                AppUser user = CreateUserFromUserRequest(request);
+                string password = _passwordService.Generate();
+                string subject = _translator[language, ConstentMessages.EmailCreateSuject];
+                string body = _translator[language, ConstentMessages.EmailCreateBody, password];
+                _emailService.Send(request.Email, subject, body);
+                AppUser user = CreateUserFromUserRequest(request, password);
                 user.AccountUserId = user.Id;
                 _work.InserUser(user);
                 this.UpdateAdminSession(admin);
@@ -215,7 +224,7 @@ namespace Domain.Logics
             }
             return userResponse;
         }
-        private AppUser CreateUserFromUserRequest(UserRequest request)
+        private AppUser CreateUserFromUserRequest(UserRequest request,string password)
         {
             DateTime utcNow = DateTime.UtcNow;
             return new AppUser
@@ -224,7 +233,7 @@ namespace Domain.Logics
                 UpdateTs = utcNow,
                 Name = request.UserName,
                 Email = request.Email,
-                Password = request.Password,
+                Password = MD5HashService.Instance.CreateMD5Hash(password),
                 RoleId = request.RoleId,
                 UserInfo = new UserInfo
                 {

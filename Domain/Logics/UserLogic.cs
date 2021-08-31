@@ -103,8 +103,7 @@ namespace Domain.Logics
             }
             if (_work.EmailIsExist(request.Email))
                 throw new TranslationException(_translator, language, ConstentMessages.EmailIsExist, null);
-            if (_work.UserNameIsExist(request.UserName))
-                throw new TranslationException(_translator, language, ConstentMessages.UserNameIsExist, null);
+           
 
             string errorMessageKey = "";
             try

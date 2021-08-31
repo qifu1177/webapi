@@ -16,6 +16,7 @@ import { UserRegisterComponent } from './user-register/user-register.component';
 import { HomeComponent } from './home/home.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserChangePasswordComponent } from './user-change-password/user-change-password.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 
 import { ErrorDialog } from './shared/error-dialog/error-dialog.component';
 import {EnterDirective} from 'src/common/directives/enter-directive';
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'user-register', component: UserRegisterComponent },
   { path: 'user-info', component: UserInfoComponent },
   { path: 'change-password', component: UserChangePasswordComponent },
+  { path: 'forget-password', component: ForgetPasswordComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 
@@ -45,6 +47,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     UserRegisterComponent,
     UserInfoComponent,
     UserChangePasswordComponent,
+    ForgetPasswordComponent,
     ErrorDialog,
     EnterDirective,
     ValitionInput

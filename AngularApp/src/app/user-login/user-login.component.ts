@@ -19,7 +19,7 @@ export class UserLoginComponent extends HttpBaseComponent implements OnInit {
   //response!: UserLoginResponse;
   loginNameFormControl!: FormControl;
   passwordFormControl!: FormControl;
-  waiting:boolean=false;
+ 
  
   ngOnInit() {
     this.request = { loginName: "", password: "" };
@@ -29,23 +29,19 @@ export class UserLoginComponent extends HttpBaseComponent implements OnInit {
   login() {
     if(this.invalid())
       return;
-    this.waiting=true;
+   
     let password = Md5.hashStr(this.passwordFormControl.value);
     let loginRequset: UserLoginRequest = { loginName: this.loginNameFormControl.value, password: `${password}` };
-    this._http.post<UserLoginResponse>(this.createUrl('Users/login'), loginRequset).subscribe({
-      next: data => {
-        this.waiting=false;
-        Store.action("user", "login")(data);
-        this.back();
-      },
-      error: error => {
-        this.waiting=false;
-        this.showError(error);
-      }
-    });
+    this.post<UserLoginResponse>('Users/login', loginRequset, (data) => {
+      Store.action("user", "login")(data);
+      this.back();
+    });    
   }
   register() {
     this._router.navigate(["user-register"]);
+  }
+  forgetPassword(){
+    this._router.navigate(['forget-password']);
   }
   invalid(): boolean {
     return this.loginNameFormControl.invalid || this.passwordFormControl.invalid;
