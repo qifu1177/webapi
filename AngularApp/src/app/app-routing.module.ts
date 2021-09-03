@@ -21,6 +21,7 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
 import { ErrorDialog } from './shared/error-dialog/error-dialog.component';
 import {EnterDirective} from 'src/common/directives/enter-directive';
 import {ValitionInput} from 'src/common/components/validation-input/validation-input.component';
+import {FilesUploadComponent} from 'src/common/components/files-upload/files-upload.component';
 
 const routes: Routes = [
   { path: 'page-not-fount', component: PageNotFoundComponent },
@@ -50,7 +51,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ForgetPasswordComponent,
     ErrorDialog,
     EnterDirective,
-    ValitionInput
+    ValitionInput,
+    FilesUploadComponent    
   ],
   imports: [
     RouterModule.forRoot(routes),

@@ -11,6 +11,7 @@ namespace Help.Interfaces
         int SessionDuration { get; set; }
         int UploadFileMaxSize { get; set; }
         List<string> UploadFileTypes { get; set; }
+        List<string> ImageTypes { get; set; }
         string EmailHost { get; set; }
         int EmailPort { get; set; }
         string SenderAccount { get; set; }

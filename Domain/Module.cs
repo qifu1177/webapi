@@ -27,6 +27,7 @@ namespace Domain
             builder.RegisterType<UserRegisterRequestValidator>().As<IValidatorWithTranslator<UserRegisterRequest>>().InstancePerLifetimeScope();
             builder.RegisterType<UserRequestValidator>().As<IValidatorWithTranslator<UserRequest>>().InstancePerLifetimeScope();
             builder.RegisterType<UserLogic>().As<IUserLogic>().InstancePerLifetimeScope();
+            builder.RegisterType<FileLogic>().As<IFileLogic>().InstancePerLifetimeScope();
             builder.RegisterType<UserAdminLogic>().As<ILogic<UserRequest, UserListResponse>>().InstancePerLifetimeScope();
         }
     }

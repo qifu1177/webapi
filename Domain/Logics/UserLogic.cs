@@ -26,14 +26,16 @@ namespace Domain.Logics
         private IValidatorWithTranslator<UserRequest> _userValidator;
         private IPasswordService _passwordService;
         private IEmailService _emailService;
+        private IFileService _fileService;
 
-        public UserLogic(IUserWorkOfUnit work, ITranslator translator, IValidatorWithTranslator<UserRegisterRequest> validator, IValidatorWithTranslator<UserRequest> userValidator, IAppSetting appSetting, IPasswordService passwordService, IEmailService emailService) : base(translator, work, appSetting)
+        public UserLogic(IUserWorkOfUnit work, ITranslator translator, IValidatorWithTranslator<UserRegisterRequest> validator, IValidatorWithTranslator<UserRequest> userValidator, IAppSetting appSetting, IPasswordService passwordService, IEmailService emailService, IFileService fileService) : base(translator, work, appSetting)
         {
             _work = work;
             _validator = validator;
             _userValidator = userValidator;
             _passwordService = passwordService;
             _emailService = emailService;
+            _fileService = fileService;
         }
 
         public UserLoginResponse Login(string language, UserLoginRequest request)
@@ -189,6 +191,7 @@ namespace Domain.Logics
         {
             UserSessionResponse response = new UserSessionResponse
             {
+                UserId="",
                 SessionId = user.Session.Id,
                 SessionUpdateTs = user.Session.UpdateTs.ToJsTime(),
                 UserName = user.Name,
@@ -203,6 +206,7 @@ namespace Domain.Logics
                 response.PhotoPath = user.UserInfo.PhotoPath;
                 response.MaritalStatus = user.UserInfo.MaritalStatus;
             }
+            response.MaxUploadFileSize = _fileService.GetRestFreeSize(user.Id);
             return response;
         }
         private void UpdateUserFromUserRequest(AppUser user, UserRequest request)

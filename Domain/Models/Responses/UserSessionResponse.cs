@@ -17,5 +17,6 @@ namespace Domain.Models.Responses
         public bool? MaritalStatus { get; set; }
         public string BirthDate { get; set; }
         public string PhotoPath { get; set; }
+        public double MaxUploadFileSize { get; set; } = 0;
     }
 }

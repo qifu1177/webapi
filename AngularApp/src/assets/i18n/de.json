@@ -10,7 +10,10 @@
         "close":"Schließen",
         "logout":"Abmelden",
         "back":"Zurück",
-        "changePassword":"Passwort ändern"
+        "changePassword":"Passwort ändern",
+        "married":"verheiratet",
+        "unmarried":"ledig",
+        "uploadFileInfo":"Sie können die Datei mit folgenden Type hochladen {{typeStr}} und Sie haben noch {{maxSize}} Byte frei Platz zu Hochladen."
     },
     "messages":{
         "pageNotFoundTitle":"Seite wurde nicht gefunden",

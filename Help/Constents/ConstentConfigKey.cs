@@ -13,6 +13,7 @@ namespace Help.Constents
         public const string Session_Duration = "UserSetting:Session:Duration";
         public const string UploadFile_MaxSize = "UserSetting:UploadFile:MaxSize";
         public const string UploadFile_Type = "UserSetting:UploadFile:Type";
+        public const string Image_Type = "UserSetting:UploadFile:ImageType";
         public const string Config_LoggingFile = "LoggingFile";
 
         public const string EmailServer_Host = "UserSetting:EmailServer:Host";

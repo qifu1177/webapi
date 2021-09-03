@@ -16,5 +16,6 @@ namespace Help.Datas
         public int EmailPort { get ; set ; }
         public string SenderAccount { get; set; }
         public string SenderAccountPassword { get; set; }
+        public List<string> ImageTypes { get; set; } = new List<string>();
     }
 }

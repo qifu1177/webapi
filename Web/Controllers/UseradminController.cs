@@ -15,7 +15,7 @@ namespace Web.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UseradminController : AbstractController<UseradminController, UserRequest, UserListResponse>
+    public class UseradminController : AbstractDBController<UseradminController, UserRequest, UserListResponse>
     {
         public UseradminController(IConfiguration configuration, ILogger<UseradminController> logger, ITranslator translator, ILogic<UserRequest, UserListResponse> logic) : base(configuration, logger, translator, logic)
         {

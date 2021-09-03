@@ -9,4 +9,5 @@ export interface UserSessionResponse extends SessionResponse {
     maritalStatus: boolean;
     birthDate: string;
     photoPath: string;
+    maxUploadFileSize:number;
 }

@@ -30,9 +30,11 @@ namespace Help
             builder.RegisterInstance(t).As<ITranslator>().ExternallyOwned();
             UpdateAppSetting();
             UpdateUploadFileTypes(AppSetting.Instance.UploadFileTypes);
+            UpdateImageTypes(AppSetting.Instance.ImageTypes);
             builder.RegisterInstance(AppSetting.Instance).As<IAppSetting>().ExternallyOwned();
             builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
             builder.RegisterType<PasswordService>().As<IPasswordService>().InstancePerLifetimeScope();
+            builder.RegisterType<FileService>().As<IFileService>().InstancePerLifetimeScope();
         }
         private void UpdateAppSetting()
         {
@@ -48,6 +50,16 @@ namespace Help
             for (int i = 0; ; i++)
             {
                 string vs = _configuration[$"{ConstentConfigKey.UploadFile_Type}:{i}"];
+                if (string.IsNullOrEmpty(vs))
+                    break;
+                list.Add(vs);
+            }
+        }
+        private void UpdateImageTypes(List<string> list)
+        {
+            for (int i = 0; ; i++)
+            {
+                string vs = _configuration[$"{ConstentConfigKey.Image_Type}:{i}"];
                 if (string.IsNullOrEmpty(vs))
                     break;
                 list.Add(vs);
